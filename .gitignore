@@ -41,3 +41,7 @@ override.tf.json
 .terraformrc
 terraform.rc
 **/backend.tf
+**/backend.hcl
+
+# CI promotion scratch files
+promotion-*.json

@@ -1,78 +1,85 @@
-# POSTECH Tech Challenge - Fase 2
+# POSTECH Tech Challenge - Fase 3
 
-Repositório de entrega do ToggleMaster, Grupo 76. O projeto reúne os cinco microsserviços, o ambiente local exigido com nove contêineres e a infraestrutura reproduzível para Oracle Cloud Infrastructure (OCI).
+Repositório principal do ToggleMaster para a Fase 3. Ele preserva a implementação validada na Fase 2 e acrescenta o scaffold de infraestrutura como código, CI/DevSecOps e promoção GitOps.
 
-## Estado da entrega
+## Estado atual
 
-| Etapa | Estado |
+Esta primeira entrega contém somente código e estrutura local. Nenhuma infraestrutura OCI foi criada, alterada ou removida.
+
+| Área | Estado |
 | --- | --- |
-| Dockerfiles e Docker Compose local | Implementado e validado |
-| Adaptação Queue/NoSQL para OCI | Implementada com fallback local |
-| Terraform de rede, OKE, OCIR e dados | Aplicado em OCI com state remoto privado |
-| OCI Vault e segredos gerados | Provisionados e consumidos via CSI/Workload Identity |
-| Kubernetes base e overlay OCI | Implantados e validados no OKE |
-| Scripts de build, deploy, smoke, carga e destroy | Implementados; fluxo cloud validado, destroy ainda não executado |
-| Evidências técnicas cloud | Pods, Ingress, HPA, Queue e NoSQL validados |
-| Vídeo e link final no PDF | Gravação concluída; link adicionado e PDF final gerado |
+| Microsserviços, Docker e Compose da Fase 2 | Preservados |
+| Terraform OCI da Fase 2 | Preservado em infra/oci durante a migração |
+| Estrutura Terraform modular da Fase 3 | Scaffold em infra/environments e infra/modules |
+| CI de monorepo | Scaffold com detecção de serviços alterados e matriz dinâmica |
+| Publicação no OCIR | Desabilitada por padrão |
+| Promoção para o GitOps | Desabilitada por padrão |
+| Deploy no OKE | Não executado |
 
-O ambiente temporário de demonstração está provisionado. Os cinco Deployments estão prontos, o Ingress responde pelo OCI Load Balancer, os HPAs escalaram sob carga e um evento do smoke foi persistido no OCI NoSQL. A gravação foi concluída; preserve o ambiente somente até confirmar o upload e o PDF final, então use o teardown ordenado e confira os custos no Console OCI.
+## Repositórios
+
+- Código, infraestrutura e CI: JulioDinizN/tech-challenge-fase-3
+- Estado desejado Kubernetes: JulioDinizN/tech-challenge-fase-3-gitops
+
+O repositório GitOps é separado para que o CI publique imagens e altere somente tags. O Argo CD será o único responsável por reconciliar os workloads no OKE.
+
+## Fluxo planejado
+
+~~~text
+Pull Request
+  -> detectar serviços alterados
+  -> testes, lint, SAST, SCA, build e scan da imagem
+  -> sem credenciais OCI e sem push
+
+Push na main
+  -> repetir todos os gates
+  -> publicar somente as imagens alteradas no OCIR com tag sha-*
+  -> gerar descritores de promoção
+  -> atualizar todas as tags afetadas em um único commit GitOps
+  -> Argo CD sincronizar somente as aplicações alteradas
+~~~
 
 ## Estrutura
 
-```text
-.
-|-- services/                 # Código e Dockerfile dos cinco microsserviços
-|-- docker/                   # Inicialização dos bancos locais
-|-- docker-compose.yml        # Ambiente local de nove contêineres
-|-- k8s/                      # Base Kubernetes e overlay OCI/OKE
-|-- infra/oci/                # Infraestrutura OCI em Terraform
-|-- scripts/                  # Validação, deploy, testes e teardown
-`-- docs/                     # Arquitetura, correções e relatório
-```
+~~~text
+.ci/                         # Catálogo e versões das ferramentas de CI
+.github/workflows/           # CI de serviços e validação de Terraform
+services/                    # Cinco microsserviços importados na Fase 2
+docker/                      # Inicialização do ambiente local
+docker-compose.yml           # Topologia local de nove contêineres
+infra/oci/                   # Terraform funcional herdado da Fase 2
+infra/environments/homolog/  # Novos root modules core e platform
+infra/modules/               # Limites dos módulos da Fase 3
+scripts/ci/                  # Detecção e promoção sem dependências externas
+docs/decisions/              # ADRs da arquitetura da Fase 3
+~~~
 
-## Fluxo de execução
+## Controles de ativação
 
-1. Validar localmente com `./scripts/validate-delivery.sh` e Docker Compose.
-2. Revisar custos, quotas, `terraform.tfvars` e o novo `terraform plan`.
-3. Após autorização explícita, aplicar o Terraform e criar o kubeconfig do OKE.
-4. Publicar as cinco imagens com tag imutável no OCIR.
-5. Implantar add-ons e workloads com `scripts/deploy-oke.sh`.
-6. Executar smoke test, carga, evidências e gravar o vídeo de até 20 minutos.
-7. Inserir o link do vídeo em `docs/report.html`, gerar o PDF final e revisar placeholders.
-8. Remover primeiro os recursos Kubernetes/LB e depois executar o `terraform destroy` pelo script documentado.
+- SECURITY_GATE_ENABLED=true torna lint/SAST/SCA bloqueantes depois do baseline.
+- ENABLE_OCIR_PUBLISH=true permite push ao OCIR somente na main.
+- ENABLE_GITOPS_PROMOTION=true permite atualizar o GitOps depois da publicação.
 
-## Execução local
+Enquanto essas variáveis estiverem ausentes ou diferentes de true, os workflows não publicam imagens nem alteram o GitOps. Deploy continua fora do CI mesmo após a ativação.
 
-```bash
-cp .env.example .env
-docker compose up --build
-```
+## Segredos e identidades
 
-O ambiente mantém exatamente a topologia local exigida:
+OCI Vault continua como fonte dos segredos de runtime, consumidos no OKE por Workload Identity e Secrets Store CSI. O CI não lê senhas de banco, MASTER_KEY ou chaves internas.
 
-- cinco contêineres de aplicação;
-- dois PostgreSQL, um Redis e um DynamoDB Local.
+A publicação futura utilizará OCIR_USERNAME e OCIR_AUTH_TOKEN limitados ao OCIR, além de GITOPS_TOKEN limitado ao repositório GitOps. OCIR_REGISTRY, OCIR_NAMESPACE e OCIR_REPOSITORY_PREFIX serão GitHub Variables não secretas.
 
-As adaptações para Vault e OCI não quebram o desenvolvimento local: `DATABASE_URL` continua com prioridade; Queue e worker OCI permanecem opcionais no Compose. Consulte `docs/local-development.md`.
+## Validação local
 
-## Infraestrutura OCI
+~~~bash
+python3 scripts/ci/detect_changed_services.py --base HEAD --head HEAD
+python3 -m unittest discover -s scripts/ci -p 'test_*.py'
+terraform fmt -check -recursive infra
+terraform -chdir=infra/oci init -backend=false
+terraform -chdir=infra/oci validate
+~~~
 
-O Terraform em `infra/oci/` cobre VCN, OKE, cinco repositórios OCIR, três sistemas OCI Database with PostgreSQL, OCI Cache, Queue, NoSQL, Vault, chave AES de software, oito segredos gerados pelo OCI e policies de Workload Identity.
+Esses comandos não fazem deploy.
 
-O overlay `k8s/overlays/oci/` transforma outputs não secretos do Terraform em ConfigMaps, referências de imagem e `SecretProviderClass`. O Secrets Store CSI sincroniza os valores do Vault em Secrets nativos do Kubernetes; nenhum valor secreto é renderizado ou versionado.
+## Proveniência
 
-Consulte `infra/oci/README.md`, `k8s/README.md` e `scripts/README.md` para operação, evidências e teardown.
-
-## Origem dos microsserviços
-
-The initial service source code was imported from the public FIAP ToggleMaster repositories:
-
-| Service | Source | Imported commit |
-| --- | --- | --- |
-| auth-service | https://github.com/FIAP-TCs/auth-service | `56e447f83409bf35b22ef04a9e39c2e30df9af33` |
-| flag-service | https://github.com/FIAP-TCs/flag-service | `21052b1abcf209ea6848350bdd9928b80b7f86fe` |
-| targeting-service | https://github.com/FIAP-TCs/targeting-service | `dd9568a583fa409b88a446685779d9e581282fd2` |
-| evaluation-service | https://github.com/FIAP-TCs/evaluation-service | `5e8ade059f69650d2e8cfbefad0a83cfac25f0a9` |
-| analytics-service | https://github.com/FIAP-TCs/analytics-service | `212d7e9b7e50f881c4022bc9e8d2722f08a2a3e2` |
-
-Cada serviço foi importado em `services/` sem seu diretório `.git`, permitindo versionar a entrega completa em um único repositório. As mudanças necessárias nos microsserviços estão registradas em `docs/fixes.md`; ajustes gerais de infraestrutura ficam documentados em `infra/` e `k8s/`.
+Base derivada de JulioDinizN/tech-challenge-fase-2 no commit 00bc8a4565aeaba4dc65212251c98f7df465d0f1.

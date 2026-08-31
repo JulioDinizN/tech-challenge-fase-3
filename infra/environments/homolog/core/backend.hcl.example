@@ -1,0 +1,5 @@
+bucket              = "replace-with-versioned-private-state-bucket"
+namespace           = "replace-with-object-storage-namespace"
+key                 = "togglemaster/phase3/homolog/core.tfstate"
+region              = "replace-with-oci-region"
+config_file_profile = "DEFAULT"
