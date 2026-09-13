@@ -1,15 +1,16 @@
+import logging
 import os
 import sys
+from functools import wraps
+
 import psycopg2
 import requests
+from database_config import build_database_config
+from dotenv import load_dotenv
+from flask import Flask, jsonify, request
+from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
 from psycopg2.pool import SimpleConnectionPool
-from flask import Flask, request, jsonify
-from dotenv import load_dotenv
-from functools import wraps
-import logging
-
-from database_config import build_database_config
 
 # Configura o logging
 logging.basicConfig(level=logging.INFO)
@@ -109,7 +110,7 @@ def create_flag():
         return jsonify({"error": f"Flag '{name}' já existe"}), 409
     except Exception as e:
         if conn: conn.rollback()
-        log.error(f"Erro ao criar flag: {e}")
+        log.exception("Erro ao criar flag")
         return jsonify({"error": "Erro interno do servidor", "details": str(e)}), 500
     finally:
         if cur: cur.close()
@@ -128,7 +129,7 @@ def get_flags():
         flags = cur.fetchall()
         return jsonify(flags)
     except Exception as e:
-        log.error(f"Erro ao buscar flags: {e}")
+        log.exception("Erro ao buscar flags")
         return jsonify({"error": "Erro interno do servidor", "details": str(e)}), 500
     finally:
         if cur: cur.close()
@@ -149,7 +150,7 @@ def get_flag(name):
             return jsonify({"error": "Flag não encontrada"}), 404
         return jsonify(flag)
     except Exception as e:
-        log.error(f"Erro ao buscar flag '{name}': {e}")
+        log.exception("Erro ao buscar flag '{name}'")
         return jsonify({"error": "Erro interno do servidor", "details": str(e)}), 500
     finally:
         if cur: cur.close()
@@ -179,7 +180,7 @@ def update_flag(name):
     
     values.append(name) # Adiciona o 'name' para a cláusula WHERE
     
-    query = f"UPDATE flags SET {', '.join(fields)} WHERE name = %s RETURNING *"
+    query = sql.SQL("UPDATE flags SET {} WHERE name = %s RETURNING *").format(sql.SQL(", ").join(sql.SQL(field) for field in fields))
     
     conn = None
     cur = None
@@ -197,7 +198,7 @@ def update_flag(name):
         return jsonify(updated_flag), 200
     except Exception as e:
         if conn: conn.rollback()
-        log.error(f"Erro ao atualizar flag '{name}': {e}")
+        log.exception("Erro ao atualizar flag '{name}'")
         return jsonify({"error": "Erro interno do servidor", "details": str(e)}), 500
     finally:
         if cur: cur.close()
@@ -222,12 +223,12 @@ def delete_flag(name):
         return "", 204 # 204 No Content
     except Exception as e:
         if conn: conn.rollback()
-        log.error(f"Erro ao deletar flag '{name}': {e}")
+        log.exception("Erro ao deletar flag '{name}'")
         return jsonify({"error": "Erro interno do servidor", "details": str(e)}), 500
     finally:
         if cur: cur.close()
         if conn: pool.putconn(conn)
 
 if __name__ == '__main__':
-    port = int(os.getenv("PORT", 8002))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    port = int(os.getenv("PORT", "8002"))
+    app.run(host='0.0.0.0', port=port, debug=False)  # nosec B104

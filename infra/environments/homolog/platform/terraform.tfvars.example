@@ -1,0 +1,7 @@
+kubeconfig_path = "replace-with-absolute-kubeconfig-path"
+kube_context = "replace-with-confirmed-homolog-context"
+region = "us-ashburn-1"
+load_balancer_subnet_id = "replace-with-core-output"
+load_balancer_nsg_id = "replace-with-core-output"
+worker_nsg_id = "replace-with-core-output"
+bootstrap_gitops = false

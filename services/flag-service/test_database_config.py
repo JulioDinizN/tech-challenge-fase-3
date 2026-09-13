@@ -19,7 +19,7 @@ class DatabaseConfigTest(unittest.TestCase):
                 "DB_PORT": "5433",
                 "DB_NAME": "flags_db",
                 "DB_USER": "flags_app",
-                "DB_PASSWORD": "p@ss:/?# word",
+                "DB_PASSWORD": "p@ss:/?# word",  # nosec B105
                 "DB_SSLMODE": "verify-full",
             }
         )
@@ -34,7 +34,7 @@ class DatabaseConfigTest(unittest.TestCase):
                 {
                     "DB_HOST": "postgres",
                     "DB_USER": "flags_app",
-                    "DB_PASSWORD": "do-not-leak",
+                    "DB_PASSWORD": "do-not-leak",  # nosec B105
                 }
             )
         self.assertNotIn("do-not-leak", str(context.exception))

@@ -1,5 +1,10 @@
 FROM python:3.11-slim
 
+# Apply available distribution security fixes before installing application packages.
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && rm -rf /var/lib/apt/lists/*
+
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 

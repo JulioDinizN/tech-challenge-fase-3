@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: togglemaster-root
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: {{ .Values.repository | quote }}
+    targetRevision: main
+    path: clusters/homolog
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  # Manual bootstrap only; application auto-sync is enabled later in GitOps.
+  syncPolicy: {}

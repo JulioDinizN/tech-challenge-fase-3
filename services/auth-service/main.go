@@ -41,7 +41,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Não foi possível conectar ao banco de dados: %v", err)
 	}
-	defer db.Close()
+	defer func() {
+		if err := db.Close(); err != nil {
+			log.Printf("Unable to close database: %v", err)
+		}
+	}()
 
 	if err := bootstrapAPIKey(db); err != nil {
 		log.Fatalf("Não foi possível criar a chave inicial da API: %v", err)

@@ -1,0 +1,35 @@
+TECH CHALLENGE — FASE 3 — TOGGLEMASTER
+Rascunho de entrega atualizado em 13/09/2026. Finalizar após demonstração.
+
+PARTICIPANTE
+Julio Cesar Diniz Nogueira — RM373719 — Grupo 76.
+Identificação preservada do projeto; conferir antes da submissão.
+
+LINKS
+Código, CI e infraestrutura: https://github.com/JulioDinizN/tech-challenge-fase-3
+GitOps: https://github.com/JulioDinizN/tech-challenge-fase-3-gitops
+Documentação: https://github.com/JulioDinizN/tech-challenge-fase-3/tree/main/docs
+Vídeo da Fase 3: PENDENTE — preencher após gravar e publicar vídeo de até 20 minutos.
+Os links dos repositórios precisam conter a versão final e ter acesso verificado para avaliação.
+
+SOLUÇÃO E DECISÕES
+Cinco microsserviços, IaC, DevSecOps e GitOps. OCI foi aceita pela disciplina conforme confirmação do responsável pelo projeto em 13/09/2026. Equivalências: VPC/VCN, EKS/OKE, RDS/OCI PostgreSQL, ElastiCache/OCI Cache, SQS/OCI Queue, DynamoDB/OCI NoSQL, ECR/OCIR e S3/Object Storage. A estimativa AWS exigida acompanha a entrega.
+
+Um único ambiente homolog temporário. Não há ambiente production duplicado. Terraform separa backend, core e platform em states distintos; core instancia o módulo composto oci-runtime. Platform instala Argo CD via Helm. CI testa, analisa e escaneia cada serviço em jobs separados; somente após aprovação publica imagens imutáveis e atualiza tags no GitOps. Argo realiza a entrega automática. Segredos de runtime ficam no OCI Vault, com Workload Identity e CSI; credenciais de publicação não são repassadas aos jobs de validação.
+
+DESAFIOS
+Preservar os contratos dos cinco serviços; separar validação sem credenciais da publicação; garantir dono único dos recursos Kubernetes; coordenar inicialização dos bancos e secrets; corrigir uma imagem OKE histórica rejeitada pelo plan, substituindo por imagem disponível e compatível com E5; preparar teardown na ordem correta para o Load Balancer gerenciado pelo Kubernetes.
+
+CUSTOS E ANEXOS
+AWS: US$ 1.077,49 por 730 horas, sem free tier.
+OCI: US$ 675,20 por 744 horas no estimador; US$ 672,20 por 730 horas sem franquias para comparação.
+Premissas e limitações em docs/costs/README.md; estes valores mensais não são orçamento exato de uma sessão de gravação.
+AWS: https://calculator.aws/#/estimate?id=b49777aec14492a057f24a0d2a39f829464dbd85
+OCI: https://www.oracle.com/cloud/costestimator.html (importar docs/costs/oci-estimate.json para restaurar a configuração).
+Prints: docs/costs/aws-calculator.png, aws-calculator-details.png e oci-calculator.png.
+PDFs anexos: docs/costs/aws-estimate.pdf e oci-estimate.pdf.
+
+VALIDAÇÃO ATUAL E EVIDÊNCIAS A COMPLETAR
+Planos preliminares: backend 1 criar e core 56 criar, nenhum alterar/destruir. State local isolado somente para análise, pois o bucket remoto não estava disponível; ainda gerar o plan definitivo com backend remoto. Terraform validate aprovado nos três roots; GitOps renderiza 32 recursos. Testes dos cinco serviços aprovados. Cinco imagens linux/amd64 construídas e escaneadas localmente com Trivy 0.74.0, sem vulnerabilidades CRITICAL após atualizar as bases Go/Alpine e pacotes Debian. Containers ainda não executados nesta revisão. Nenhum recurso foi criado nesta preparação.
+PENDENTE: registrar runs de segurança vermelho e verde; SHA/tag/digest e commit automático GitOps; cinco serviços saudáveis no Argo; sync automático; recursos e backend remoto efetivos. Não apresentar validações da Fase 2 como evidências da Fase 3.
+PENDENTE: conferir captura, duração, áudio, anonimização de credenciais, links, identificação e encerramento dos recursos.

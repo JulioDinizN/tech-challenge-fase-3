@@ -25,6 +25,7 @@ jobs:
       matrix:
         directory:
           - infra/oci
+          - infra/environments/homolog/backend
           - infra/environments/homolog/core
           - infra/environments/homolog/platform
     steps:
@@ -53,5 +54,4 @@ jobs:
           cache: true
 
       - name: Scan Terraform configuration
-        continue-on-error: ${{ vars.SECURITY_GATE_ENABLED != 'true' }}
         run: trivy config --severity CRITICAL --exit-code 1 "${{ matrix.directory }}"

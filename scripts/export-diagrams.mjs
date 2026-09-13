@@ -16,18 +16,18 @@ const drawioCandidates = [
   defaultMacDrawio
 ].filter(Boolean);
 
-const diagrams = [
+const diagrams = ["overall-architecture", "runtime-architecture"].map((name) => (
   {
-    source: path.join(repoRoot, "docs", "diagrams", "overall-architecture.drawio"),
+    source: path.join(repoRoot, "docs", "diagrams", `${name}.drawio`),
     exports: [
       {
         format: "png",
-        output: path.join(repoRoot, "docs", "diagrams", "overall-architecture.png"),
+        output: path.join(repoRoot, "docs", "diagrams", `${name}.png`),
         args: ["-x", "-f", "png", "-b", "10", "-s", "2"]
       }
     ]
   }
-];
+));
 
 async function ensureFileExists(filePath, label) {
   try {

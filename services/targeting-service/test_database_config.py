@@ -18,7 +18,7 @@ class DatabaseConfigTest(unittest.TestCase):
                 "DB_HOST": "targeting.postgresql.internal",
                 "DB_NAME": "targeting_db",
                 "DB_USER": "targeting_app",
-                "DB_PASSWORD": "p@ss:/?# word",
+                "DB_PASSWORD": "p@ss:/?# word",  # nosec B105
             }
         )
         self.assertEqual(config["password"], "p@ss:/?# word")
@@ -34,7 +34,7 @@ class DatabaseConfigTest(unittest.TestCase):
                     "DB_PORT": "not-a-number",
                     "DB_NAME": "targeting_db",
                     "DB_USER": "targeting_app",
-                    "DB_PASSWORD": "do-not-leak",
+                    "DB_PASSWORD": "do-not-leak",  # nosec B105
                 }
             )
 

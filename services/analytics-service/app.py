@@ -95,8 +95,8 @@ if WORKER_ENABLED:
         validate_worker_configuration()
         queue_client, nosql_client = build_oci_clients()
         log.info("OCI Queue and NoSQL clients initialized in region %s", OCI_REGION)
-    except Exception as error:
-        log.critical("Unable to initialize OCI clients: %s", error)
+    except Exception:
+        log.exception("Unable to initialize OCI clients")
         sys.exit(1)
 else:
     log.info("Analytics worker disabled for local execution.")
@@ -117,7 +117,7 @@ def process_message(message, queue=None, nosql=None):
         if missing_fields:
             raise ValueError("missing event fields: " + ", ".join(missing_fields))
         if not isinstance(body["result"], bool):
-            raise ValueError("event field result must be a boolean")
+            raise TypeError("event field result must be a boolean")
 
         row = {
             "event_id": message_id,
@@ -138,12 +138,12 @@ def process_message(message, queue=None, nosql=None):
 
         log.info("Event %s (flag: %s) stored in OCI NoSQL.", message_id, row["flag_name"])
         return True
-    except (json.JSONDecodeError, ValueError) as error:
+    except (json.JSONDecodeError, ValueError, TypeError) as error:
         log.error("Invalid analytics event %s: %s", message_id, error)
     except oci.exceptions.ServiceError as error:
         log.error("OCI error while processing message %s: %s", message_id, error)
-    except Exception as error:
-        log.error("Unexpected error while processing message %s: %s", message_id, error)
+    except Exception:
+        log.exception("Unexpected error while processing message %s", message_id)
 
     # The message is deliberately not acknowledged so OCI Queue can redeliver it.
     return False
@@ -169,8 +169,8 @@ def queue_worker_loop():
         except oci.exceptions.ServiceError as error:
             log.error("OCI Queue worker error: %s", error)
             time.sleep(10)
-        except Exception as error:
-            log.error("Unexpected analytics worker error: %s", error)
+        except Exception:
+            log.exception("Unexpected analytics worker error")
             time.sleep(10)
 
 
@@ -199,5 +199,5 @@ def start_worker():
 start_worker()
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8005))
-    app.run(host="0.0.0.0", port=port, debug=False)
+    port = int(os.getenv("PORT", "8005"))
+    app.run(host="0.0.0.0", port=port, debug=False)  # nosec B104

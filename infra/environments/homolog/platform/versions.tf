@@ -5,4 +5,13 @@ terraform {
     namespace = "configured-at-init"
     key       = "togglemaster/phase3/homolog/platform.tfstate"
   }
+  required_providers {
+    helm = { source = "hashicorp/helm", version = "3.2.0" }
+  }
+}
+provider "helm" {
+  kubernetes = {
+    config_path    = var.kubeconfig_path
+    config_context = var.kube_context
+  }
 }

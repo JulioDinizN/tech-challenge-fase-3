@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Local validation only: never plan/apply, contact a cluster, publish or push.
+set -euo pipefail
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo"
+python_bin="${PYTHON_BIN:-python3}"
+gitops_root="${GITOPS_ROOT:-$repo/../tech-challenge-fase-3-gitops}"
+"$python_bin" -m unittest discover -s scripts/ci -p 'test_*.py' -v
+"$python_bin" -m unittest discover -s scripts -p 'test_*.py' -v
+terraform fmt -check -recursive infra
+for root in backend core platform; do
+  terraform -chdir="infra/environments/homolog/$root" validate
+done
+"$python_bin" "$gitops_root/scripts/validate_structure.py"
+docker compose config --quiet
+git diff --check
+git -C "$gitops_root" diff --check
+printf '%s\n' 'Local preparation checks passed. This is not live deployment verification.'

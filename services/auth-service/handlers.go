@@ -22,7 +22,7 @@ type CreateKeyResponse struct {
 // healthHandler é um simples endpoint de verificação de saúde
 func (a *App) healthHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+	writeJSON(w, map[string]string{"status": "ok"})
 }
 
 // validateKeyHandler verifica se uma chave de API (enviada via Header) é válida
@@ -51,7 +51,7 @@ func (a *App) validateKeyHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Chave válida
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Chave válida"})
+	writeJSON(w, map[string]string{"message": "Chave válida"})
 }
 
 // createKeyHandler cria uma nova chave de API
@@ -95,7 +95,7 @@ func (a *App) createKeyHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Nova chave criada com sucesso (ID: %d, Name: %s)", newID, req.Name)
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(CreateKeyResponse{
+	writeJSON(w, CreateKeyResponse{
 		Name:    req.Name,
 		Key:     newKey, // Retorna a chave em texto plano pela última vez
 		Message: "Guarde esta chave com segurança! Você não poderá vê-la novamente.",
@@ -117,4 +117,11 @@ func (a *App) masterKeyAuthMiddleware(next http.Handler) http.Handler {
 		// Se a chave for válida, continua para o handler principal
 		next.ServeHTTP(w, r)
 	})
+}
+
+// writeJSON records client-write failures without attempting a second HTTP response.
+func writeJSON(w http.ResponseWriter, value any) {
+	if err := json.NewEncoder(w).Encode(value); err != nil {
+		log.Printf("Unable to write JSON response: %v", err)
+	}
 }

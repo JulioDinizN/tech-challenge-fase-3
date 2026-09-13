@@ -1,2 +1,53 @@
-# Scaffold only. Move ownership from infra/oci deliberately.
-# Never declare the same OCI resource in both states.
+# Fresh Phase 3 ownership. Never apply alongside legacy infra/oci for the same resources.
+provider "oci" {
+  region              = var.region
+  config_file_profile = var.oci_config_profile
+  auth                = var.oci_auth
+}
+module "runtime" {
+  source                               = "../../../modules/oci-runtime"
+  project_name                         = var.project_name
+  region                               = var.region
+  tenancy_ocid                         = var.tenancy_ocid
+  compartment_id                       = var.compartment_id
+  oci_config_profile                   = var.oci_config_profile
+  oci_auth                             = var.oci_auth
+  ocir_namespace                       = var.ocir_namespace
+  ocir_region_key                      = var.ocir_region_key
+  api_allowed_cidrs                    = var.api_allowed_cidrs
+  network_cidrs                        = var.network_cidrs
+  kubernetes_version                   = var.kubernetes_version
+  oke_cluster_type                     = var.oke_cluster_type
+  node_image_id                        = var.node_image_id
+  node_shape                           = var.node_shape
+  node_pool_size                       = var.node_pool_size
+  node_pool_name                       = var.node_pool_name
+  node_availability_domain_count       = var.node_availability_domain_count
+  node_availability_domain_start_index = var.node_availability_domain_start_index
+  node_ocpus                           = var.node_ocpus
+  node_memory_in_gbs                   = var.node_memory_in_gbs
+  node_boot_volume_size_in_gbs         = var.node_boot_volume_size_in_gbs
+  ssh_public_key                       = var.ssh_public_key
+  availability_domain_name             = var.availability_domain_name
+  postgres_admin_username              = var.postgres_admin_username
+  postgres_db_version                  = var.postgres_db_version
+  postgres_shapes                      = var.postgres_shapes
+  postgres_instance_count              = var.postgres_instance_count
+  postgres_ocpus                       = var.postgres_ocpus
+  postgres_memory_in_gbs               = var.postgres_memory_in_gbs
+  postgres_regionally_durable          = var.postgres_regionally_durable
+  redis_node_count                     = var.redis_node_count
+  redis_node_memory_in_gbs             = var.redis_node_memory_in_gbs
+  redis_software_version               = var.redis_software_version
+  queue_retention_in_seconds           = var.queue_retention_in_seconds
+  queue_visibility_in_seconds          = var.queue_visibility_in_seconds
+  nosql_table_name                     = var.nosql_table_name
+  nosql_read_units                     = var.nosql_read_units
+  nosql_write_units                    = var.nosql_write_units
+  nosql_storage_in_gbs                 = var.nosql_storage_in_gbs
+  kubernetes_namespace                 = var.kubernetes_namespace
+  create_workload_identity_policy      = var.create_workload_identity_policy
+  secrets_provider_namespace           = var.secrets_provider_namespace
+  secrets_provider_service_account     = var.secrets_provider_service_account
+  freeform_tags                        = var.freeform_tags
+}

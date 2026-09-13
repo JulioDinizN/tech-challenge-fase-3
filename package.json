@@ -1,8 +1,8 @@
 {
-  "name": "tech-challenge-fase-2",
+  "name": "tech-challenge-fase-3",
   "version": "0.1.0",
   "private": true,
-  "description": "POSTECH Tech Challenge Fase 2 delivery workspace.",
+  "description": "POSTECH Tech Challenge Fase 3 delivery workspace.",
   "type": "module",
   "scripts": {
     "diagrams:export": "node scripts/export-diagrams.mjs",

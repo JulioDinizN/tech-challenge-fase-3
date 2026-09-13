@@ -16,6 +16,7 @@ ZERO_SHA = "0" * 40
 SHARED_PREFIXES = (
     ".ci/",
     ".github/workflows/_service-ci.yml",
+    ".github/workflows/_publish-service.yml",
     ".github/workflows/services-ci.yml",
     "docker/",
     "scripts/ci/",
@@ -57,7 +58,7 @@ def revision_exists(revision: str) -> bool:
 def changed_files(base: str, head: str) -> list[str] | None:
     if not revision_exists(base) or not revision_exists(head):
         return None
-    result = run_git("diff", "--name-only", "--diff-filter=ACMR", base, head)
+    result = run_git("diff", "--name-only", "--no-renames", "--diff-filter=ACDMT", base, head)
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or "git diff failed")
     return [line for line in result.stdout.splitlines() if line]

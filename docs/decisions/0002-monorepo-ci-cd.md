@@ -2,11 +2,11 @@
 
 ## Status
 
-Aceita para o scaffold.
+Implementada; execução remota pendente.
 
 ## Decisão
 
-Um orquestrador detecta diretórios alterados e chama um workflow reutilizável para cada serviço. Na main, cada job pode publicar uma imagem e gerar um descritor; um único job cria um commit GitOps com todas as promoções.
+Um orquestrador detecta diretórios alterados e chama um workflow reutilizável para cada serviço. Cada serviço percorre jobs bloqueantes de testes, lint, SAST/SCA e build/scan de imagem. Na main, após toda a matriz passar, um workflow separado recebe credenciais e publica os artefatos escaneados. Um único job cria o commit GitOps com todas as promoções.
 
 ## Consequências
 

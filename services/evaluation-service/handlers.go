@@ -15,7 +15,7 @@ type EvaluationResponse struct {
 func (a *App) healthHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+	writeJSON(w, map[string]string{"status": "ok"})
 }
 
 func (a *App) evaluationHandler(w http.ResponseWriter, r *http.Request) {
@@ -50,9 +50,16 @@ func (a *App) evaluationHandler(w http.ResponseWriter, r *http.Request) {
 
 	// 4. Retornar a resposta
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(EvaluationResponse{
+	writeJSON(w, EvaluationResponse{
 		FlagName: flagName,
 		UserID:   userID,
 		Result:   result,
 	})
+}
+
+// writeJSON records client-write failures without attempting a second HTTP response.
+func writeJSON(w http.ResponseWriter, value any) {
+	if err := json.NewEncoder(w).Encode(value); err != nil {
+		log.Printf("Unable to write JSON response: %v", err)
+	}
 }

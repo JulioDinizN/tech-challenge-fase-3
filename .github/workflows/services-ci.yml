@@ -66,8 +66,20 @@ jobs:
       service_path: ${{ matrix.path }}
       language: ${{ matrix.language }}
       runtime_version: ${{ matrix.runtime_version }}
-      security_gate_enabled: ${{ vars.SECURITY_GATE_ENABLED == 'true' }}
-      publish: ${{ github.event_name == 'push' && vars.ENABLE_OCIR_PUBLISH == 'true' }}
+      export_image: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_OCIR_PUBLISH == 'true' }}
+
+  publish:
+    name: Publish ${{ matrix.name }}
+    needs: [changes, service-ci]
+    if: >-
+      github.event_name == 'push' && github.ref == 'refs/heads/main' &&
+      needs.changes.outputs.has_changes == 'true' && vars.ENABLE_OCIR_PUBLISH == 'true'
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.changes.outputs.matrix) }}
+    uses: ./.github/workflows/_publish-service.yml
+    with:
+      service_name: ${{ matrix.name }}
       ocir_registry: ${{ vars.OCIR_REGISTRY }}
       ocir_namespace: ${{ vars.OCIR_NAMESPACE }}
       ocir_repository_prefix: ${{ vars.OCIR_REPOSITORY_PREFIX }}
@@ -77,10 +89,11 @@ jobs:
 
   promote-gitops:
     name: Promote all changed images
-    needs: [changes, service-ci]
+    needs: [changes, publish]
     if: >-
       github.event_name == 'push' &&
-      needs.service-ci.result == 'success' &&
+      github.ref == 'refs/heads/main' &&
+      needs.publish.result == 'success' &&
       vars.ENABLE_OCIR_PUBLISH == 'true' &&
       vars.ENABLE_GITOPS_PROMOTION == 'true'
     runs-on: ubuntu-24.04
@@ -127,13 +140,17 @@ jobs:
   ci-gate:
     name: CI gate
     if: always()
-    needs: [changes, service-ci]
+    needs: [changes, service-ci, publish, promote-gitops]
     runs-on: ubuntu-24.04
     steps:
       - name: Evaluate matrix result
         env:
           CHANGES_RESULT: ${{ needs.changes.result }}
           SERVICES_RESULT: ${{ needs.service-ci.result }}
+          PUBLISH_RESULT: ${{ needs.publish.result }}
+          PROMOTION_RESULT: ${{ needs.promote-gitops.result }}
         run: |
           test "$CHANGES_RESULT" == "success"
           test "$SERVICES_RESULT" == "success" -o "$SERVICES_RESULT" == "skipped"
+          test "$PUBLISH_RESULT" == "success" -o "$PUBLISH_RESULT" == "skipped"
+          test "$PROMOTION_RESULT" == "success" -o "$PROMOTION_RESULT" == "skipped"
