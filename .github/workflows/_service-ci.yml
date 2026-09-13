@@ -108,11 +108,10 @@ jobs:
         working-directory: ${{ inputs.service_path }}
         run: go vet ./...
 
-      - name: Install Go analysis tools
+      - name: Install Go linter
         if: inputs.language == 'go'
         run: |
           go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.13.2
-          go install github.com/securego/gosec/v2/cmd/gosec@v2.29.0
 
       - name: Lint Go service
         if: inputs.language == 'go'
@@ -160,10 +159,9 @@ jobs:
           python -m pip install -r "${{ inputs.service_path }}/requirements.txt"
           python -m pip install -r .ci/python-tools.txt
 
-      - name: Install Go analysis tools
+      - name: Install Go SAST
         if: inputs.language == 'go'
         run: |
-          go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.13.2
           go install github.com/securego/gosec/v2/cmd/gosec@v2.29.0
 
       - name: Run Go SAST

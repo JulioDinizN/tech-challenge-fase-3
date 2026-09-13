@@ -47,7 +47,5 @@ module "runtime" {
   nosql_storage_in_gbs                 = var.nosql_storage_in_gbs
   kubernetes_namespace                 = var.kubernetes_namespace
   create_workload_identity_policy      = var.create_workload_identity_policy
-  secrets_provider_namespace           = var.secrets_provider_namespace
-  secrets_provider_service_account     = var.secrets_provider_service_account
   freeform_tags                        = var.freeform_tags
 }

@@ -54,3 +54,9 @@ Após salvar/revisar evidências: interromper promoções e desativar auto-sync,
 Usar somente homolog. Antes de criar cluster/bancos, aprovar CI remoto dos cinco serviços, build/scan das imagens, fixture de segurança e configuração de captura. Na janela autorizada, provisionar, validar, registrar IaC/CI/GitOps/Argo e conferir os clipes. Encerrar recursos assim que as evidências essenciais estiverem salvas; edição e upload não precisam do ambiente ligado. Se um bloqueio exigir trabalho fora da sessão acompanhada, salvar o diagnóstico e encerrar ordenadamente, sem deixar recursos durante a noite.
 
 Verificar no encerramento recursos gerados pelo Kubernetes, volumes, backups, imagens/objetos retidos e exclusões pendentes. O bucket tem prevent_destroy e é retido por padrão. Não prometer custo zero enquanto houver itens residuais; registrar o inventário final. Nenhuma rotina automática de destruição está habilitada.
+
+## Permissões a conferir antes de criar PostgreSQL
+
+Além das quotas, conferir a identidade que executará Terraform: permissões de gerenciamento PostgreSQL/rede e leitura de `secret-family` e `vaults`, conforme a [política oficial do PostgreSQL](https://docs.oracle.com/en-us/iaas/Content/postgresql/policies.htm). Não adicionar um grant amplo a `service psql` com base apenas em uma hipótese de revisão. A leitura dos bundles pelo serviço e a montagem CSI permanecem verificações do bootstrap real. A condição `target.vault.id` é documentada nas [políticas comuns da Oracle](https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/commonpolicies.htm) para limitar acesso a uma família de segredos; mantê-la até existir evidência concreta que exija ajuste.
+
+O prazo de 20 minutos é para o vídeo editado, não para provisionamento/validação/teardown. A reconciliação do Argo configurada em 60s também não garante rollout saudável em 60s; salvar a sequência real de commits e operações.

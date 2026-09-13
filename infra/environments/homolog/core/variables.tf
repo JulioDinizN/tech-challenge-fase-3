@@ -394,18 +394,6 @@ variable "create_workload_identity_policy" {
   default     = true
 }
 
-variable "secrets_provider_namespace" {
-  description = "Namespace used by the OCI Vault Secrets Store CSI provider."
-  type        = string
-  default     = "kube-system"
-}
-
-variable "secrets_provider_service_account" {
-  description = "Service account created by the OCI Vault Secrets Store CSI provider Helm chart."
-  type        = string
-  default     = "oci-secrets-store-csi-driver-provider-sa"
-}
-
 variable "freeform_tags" {
   description = "Additional free-form tags merged into all supported resources."
   type        = map(string)
