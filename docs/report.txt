@@ -2,8 +2,8 @@ TECH CHALLENGE — FASE 3 — TOGGLEMASTER
 Relatório atualizado em 14/09/2026. Link do vídeo pendente.
 
 PARTICIPANTE
-Julio Cesar Diniz Nogueira — RM373719 — Grupo 76.
-Identificação preservada do projeto; conferir antes da submissão.
+Julio Cesar Diniz Nogueira — RM373719 — Grupo 100.
+Grupo atualizado conforme confirmação do participante.
 
 LINKS
 Código, CI e infraestrutura: https://github.com/JulioDinizN/tech-challenge-fase-3

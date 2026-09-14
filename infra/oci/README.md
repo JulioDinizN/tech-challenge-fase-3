@@ -1,6 +1,6 @@
 # OCI Terraform infrastructure
 
-This directory defines the cloud infrastructure used by ToggleMaster on Oracle Cloud Infrastructure. The authorized Ashburn stack has been applied with a private remote state backend and is temporarily active for the Group 76 demonstration. Do not run another full apply or destroy before the recording is complete.
+This directory defines the cloud infrastructure used by ToggleMaster on Oracle Cloud Infrastructure. The authorized Ashburn stack has been applied with a private remote state backend and is temporarily active for the Group 100 demonstration. Do not run another full apply or destroy before the recording is complete.
 
 ## Challenge mapping
 
