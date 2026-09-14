@@ -117,6 +117,12 @@ resource "oci_core_subnet" "data" {
   route_table_id             = oci_core_route_table.private.id
   security_list_ids          = [oci_core_security_list.empty.id]
   freeform_tags              = local.common_tags
+
+  # OCI Cache attaches its service-owned redis-security-list after creation.
+  # Keep that association; application access remains defined by our NSGs.
+  lifecycle {
+    ignore_changes = [security_list_ids]
+  }
 }
 
 resource "oci_core_network_security_group" "api" {

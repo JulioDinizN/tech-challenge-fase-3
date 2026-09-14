@@ -105,11 +105,23 @@ resource "oci_containerengine_node_pool" "main" {
     }
 
     precondition {
-      condition = contains(
-        data.oci_containerengine_node_pool_option.oke.sources[*].image_id,
-        var.node_image_id,
+      condition = (
+        contains(data.oci_containerengine_node_pool_option.oke.sources[*].image_id, var.node_image_id) ||
+        (
+          data.oci_core_image.worker.compartment_id == data.oci_core_image.oke_catalog_reference.compartment_id &&
+          try(regex("-OKE-([0-9]+\\.[0-9]+\\.[0-9]+)-[0-9]+$", data.oci_core_image.worker.display_name)[0] == trimprefix(var.kubernetes_version, "v"), false)
+        )
       )
-      error_message = "node_image_id is not an OKE image compatible with kubernetes_version."
+      error_message = "node_image_id must be a catalog OKE image or an Oracle platform OKE image matching kubernetes_version."
+    }
+
+    precondition {
+      condition = (
+        data.oci_core_image.worker.state == "AVAILABLE" &&
+        contains(data.oci_core_shapes.worker_image.shapes[*].name, var.node_shape) &&
+        var.node_boot_volume_size_in_gbs * 1024 >= tonumber(data.oci_core_image.worker.size_in_mbs)
+      )
+      error_message = "The worker image must be AVAILABLE, compatible with node_shape, and fit the configured boot volume."
     }
 
     precondition {

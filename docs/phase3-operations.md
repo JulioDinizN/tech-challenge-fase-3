@@ -19,13 +19,15 @@ O script não faz plan, apply, deploy, push ou consultas ao cluster. Scans/teste
 - `platform`: Helm gerencia CSI, provider OCI, Metrics Server, NGINX Ingress e Argo. API Argo permanece ClusterIP, acessada por port-forward.
 - `infra/oci`: legado da Fase 2. Não aplicar legado e core sobre os mesmos recursos. Nenhum state foi migrado nesta preparação. Antes de usar um compartimento que já tenha recursos, inventariar os states e planejar import/migração; não aplicar core cegamente.
 
-Core exige região, OCIDs, IP permitido, versão Kubernetes e imagem OKE compatível. O exemplo usa Ashburn, workers E5 e PostgreSQL E5/E6/Standard3. A imagem foi validada no preflight; reconfirmar disponibilidade e quotas antes do apply. O ambiente usa PostgreSQL E5 para auth, E6 para flag e Standard3 para targeting, conforme cotas por shape. Core e platform usam chaves distintas do backend. Não versionar `.tfvars`, `backend.hcl`, kubeconfig, state ou planos salvos.
+Core exige região, OCIDs, IP permitido, versão Kubernetes e imagem OKE compatível. O exemplo usa Ashburn, workers E3 em AD-3 e PostgreSQL E5/E6/Standard3. A imagem foi validada no preflight; reconfirmar disponibilidade e quotas antes do apply. O ambiente usa PostgreSQL E5 para auth, E6 para flag e Standard3 para targeting, conforme cotas por shape. Core e platform usam chaves distintas do backend. Não versionar `.tfvars`, `backend.hcl`, kubeconfig, state ou planos salvos.
 
 ## Validação dos workers antes do deploy
 
 Na Fase 2, a imagem OKE build `1505` falhou no initramfs com erro de resolução iSCSI, antes de cloud-init e kubelet. O `RegisterTimeOut` foi consequência; rede e criptografia PV em trânsito não eram a causa. A build `1462` funcionou em E3/AD-3, mas não consta no catálogo atual filtrado para OKE 1.34.2/OL8/x86.
 
-Para esta implantação, a build `1578` foi confirmada como `AVAILABLE`, listada para Kubernetes `v1.34.2` e compatível com `VM.Standard.E5.Flex`; seu disco mínimo cabe no boot volume de 50 GiB. Iniciar com um worker em AD-3, aguardar `Ready`, conferir `status.nodeInfo.kubeletVersion` e testar agendamento antes de ampliar para dois. Se o registro falhar, investigar Work Request e console serial antes de mudar rede ou repetir a criação. Compatibilidade declarada no catálogo não substitui essa verificação real de boot.
+Para esta implantação, reutilizar a combinação da Fase 2: Oracle Linux 8.10 build `1462`, Kubernetes `v1.34.2`, `VM.Standard.E3.Flex`, AD-3. O OCID exato continua `AVAILABLE` e compatível com E3, embora não esteja na lista atual de sugestões OKE. O preflight aceita uma imagem fixada fora dessa lista somente quando pertence ao mesmo compartimento de publicação da imagem oficial do catálogo e seu nome contém a versão Kubernetes solicitada. Também valida disponibilidade, shape e tamanho mínimo do disco pela API OCI.
+
+Iniciar com um worker, aguardar `Ready`, conferir `status.nodeInfo.kubeletVersion` e testar agendamento antes de ampliar para dois. Se o registro falhar, investigar Work Request e console serial antes de repetir a criação. Compatibilidade declarada não substitui a verificação real de boot.
 
 O primeiro boot da build `1578` completou initramfs/cloud-init, mas revelou um segundo problema: o kubelet rejeita `app.kubernetes.io/part-of` em `--node-labels`. O módulo usa agora o label inicial `project=togglemaster`, fora dos domínios reservados. Labels `app.kubernetes.io/*` dos manifests dos aplicativos não são afetados.
 
@@ -68,3 +70,5 @@ Verificar no encerramento recursos gerados pelo Kubernetes, volumes, backups, im
 Além das quotas, conferir a identidade que executará Terraform: permissões de gerenciamento PostgreSQL/rede e leitura de `secret-family` e `vaults`, conforme a [política oficial do PostgreSQL](https://docs.oracle.com/en-us/iaas/Content/postgresql/policies.htm). Não adicionar um grant amplo a `service psql` com base apenas em uma hipótese de revisão. A leitura dos bundles pelo serviço e a montagem CSI permanecem verificações do bootstrap real. A condição `target.vault.id` é documentada nas [políticas comuns da Oracle](https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/commonpolicies.htm) para limitar acesso a uma família de segredos; mantê-la até existir evidência concreta que exija ajuste.
 
 O prazo de 20 minutos é para o vídeo editado, não para provisionamento/validação/teardown. A reconciliação do Argo configurada em 60s também não garante rollout saudável em 60s; salvar a sequência real de commits e operações.
+
+A OCI Cache adiciona automaticamente a `redis-security-list` à subnet de dados. O Terraform preserva essa associação gerenciada pelo serviço com `ignore_changes` somente em `security_list_ids` dessa subnet; os NSGs do projeto continuam versionados.

@@ -100,3 +100,7 @@ A conferência independente por SKU reproduziu o total visível de **US$ 675,20*
 ## Ajuste de shape na ativação
 
 O preflight de cotas indicou apenas um PostgreSQL E5 e um E6 disponíveis. O banco flag usa E6 (1 OCPU/16 GB); auth permanece E5 e targeting Standard3. A estimativa oficial arquivada usou E5 para flag. No catálogo Oracle consultado, E6 usa US$ 0,03/OCPU-h (B111129) e US$ 0,002/GB-h (B111130), iguais aos componentes E5 usados no cálculo; a troca não altera o total estimado sob as mesmas premissas. Os exports originais do estimador foram preservados para rastreabilidade.
+
+### Ajuste dos workers na implantação
+
+Para reutilizar a combinação validada na Fase 2, os workers de homolog usam E3 Flex em AD-3, em vez de E5 Flex dos exports originais. Mantendo dois workers de 1 OCPU/8 GB, o catálogo Oracle consultado lista E3 a US$ 0,025/OCPU-h e US$ 0,0015/GB-h, contra E5 a US$ 0,030 e US$ 0,002. A diferença estimada é de US$ 13,392 por 744 h (US$ 13,14 por 730 h). Os arquivos originais das calculadoras permanecem como evidência da estimativa inicial; esse ajuste deve ser informado na apresentação e não representa uma fatura real.

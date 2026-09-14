@@ -14,18 +14,18 @@ ocir_region_key = "iad"
 # Replace with the operator's current public IP in /32 notation.
 api_allowed_cidrs = ["203.0.113.10/32"]
 
-# Confirmed by OCI node-pool options and E5 image compatibility on 2026-09-13.
-# Reconfirm availability before apply: Oracle-Linux-8.10-2026.07.20-0-OKE-1.34.2-1578
+# Phase 2 combination; image availability and E3 compatibility rechecked on 2026-09-13.
+# Oracle-Linux-8.10-2026.04.30-3-OKE-1.34.2-1462; recheck before each deployment.
 kubernetes_version = "v1.34.2"
-node_image_id      = "ocid1.image.oc1.iad.aaaaaaaaa3oa2zqh5ijzghk7hz5xt7z2khaonfar2yp4ikkjkyqtfxwlvvcq"
-node_shape         = "VM.Standard.E5.Flex"
+node_image_id      = "ocid1.image.oc1.iad.aaaaaaaauedaaoleflnipq4s6u37rb3wcu6xmod4eln6xrcc3h3hwtmswzyq"
+node_shape         = "VM.Standard.E3.Flex"
 oke_cluster_type   = "ENHANCED_CLUSTER"
 
 # Development-sized defaults are intentionally explicit for cost review.
 node_pool_size                       = 2
 node_pool_name                       = null
-node_availability_domain_count       = null
-node_availability_domain_start_index = 0
+node_availability_domain_count       = 1
+node_availability_domain_start_index = 2
 node_ocpus                           = 1
 node_memory_in_gbs                   = 8
 postgres_instance_count              = 1
