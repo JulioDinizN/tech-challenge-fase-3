@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bundle pinned upstream JSON schema references without weakening validation."""
+"""Bundle pinned schemas and scope ingress secret access to its namespace."""
 import argparse
 import copy
 import gzip
@@ -58,10 +58,46 @@ def bundle(chart_path, schema_path, output):
                     if not member.isfile() or ".." in Path(member.name).parts:
                         raise ValueError("Unexpected archive member")
                     data = payload if member.name == "nginx-ingress/values.schema.json" else source.extractfile(member).read()
+                    if member.name == "nginx-ingress/templates/clusterrole.yaml":
+                        if data.count(b"  - secrets\n") != 1:
+                            raise ValueError("Unexpected upstream secret RBAC")
+                        data = data.replace(b"  - secrets\n", b"")
+                    if member.name == "nginx-ingress/values.yaml":
+                        data = data.replace(b'watchSecretNamespace: ""', b'watchSecretNamespace: "nginx-ingress"')
                     info = tarfile.TarInfo(member.name)
                     info.size = len(data)
                     info.mode = member.mode
                     target.addfile(info, io.BytesIO(data))
+                role = b'''{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "nginx-ingress.fullname" . }}-secrets
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "nginx-ingress.fullname" . }}-secrets
+  namespace: {{ .Release.Namespace }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "nginx-ingress.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ include "nginx-ingress.fullname" . }}-secrets
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}
+'''
+                info = tarfile.TarInfo("nginx-ingress/templates/secret-role.yaml")
+                info.size = len(role)
+                info.mode = 0o644
+                target.addfile(info, io.BytesIO(role))
     print(f"Bundled {len(definitions)} upstream definitions; validation remains enabled.")
 
 

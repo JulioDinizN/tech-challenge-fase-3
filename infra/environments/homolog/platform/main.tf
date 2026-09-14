@@ -42,6 +42,8 @@ resource "helm_release" "ingress" {
   atomic  = true
   timeout = 600
   values = [yamlencode({ controller = {
+    watchNamespace        = "togglemaster"
+    watchSecretNamespace  = "nginx-ingress"
     nginxplus             = false
     image                 = { repository = "docker.io/nginx/nginx-ingress" }
     enableCustomResources = false
