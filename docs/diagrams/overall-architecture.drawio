@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
 <mxfile host="app.diagrams.net" version="30.0.4">
   <diagram id="phase3-delivery" name="overall-architecture">
-    <mxGraphModel grid="1" page="1" pageWidth="1120" pageHeight="1250">
+    <mxGraphModel grid="1" page="1" pageWidth="1120" pageHeight="1090">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="title" value="&lt;b&gt;ToggleMaster · Arquitetura DevSecOps&lt;/b&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e1;fontColor=#18364b;fontSize=32;spacing=14;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="35" y="20" width="1050" height="55" />
         </mxCell>
-        <mxCell id="sub" value="OCI · homolog · Fluxo implantado e verificado em 14/09/2026" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e1;fontColor=#18364b;fontSize=19;spacing=14;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="sub" value="Infraestrutura em OCI · Ambiente homolog · Integração contínua e entrega via GitOps" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e1;fontColor=#18364b;fontSize=19;spacing=14;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="35" y="76" width="1050" height="35" />
         </mxCell>
         <mxCell id="ci-title" value="&lt;b&gt;01 / VALIDAR E PUBLICAR&lt;/b&gt; · GitHub Actions" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e1;fontColor=#18364b;fontSize=21;spacing=14;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="1">
@@ -44,7 +44,7 @@
         <mxCell id="argo" value="&lt;b&gt;Argo CD&lt;/b&gt;&lt;br&gt;&lt;br&gt;Observa o GitOps&lt;br&gt;Sync automático + self-heal" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#f2eff8;strokeColor=#cbd5e1;fontColor=#18364b;fontSize=19;spacing=14;align=left;verticalAlign=middle;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="390" y="565" width="320" height="140" />
         </mxCell>
-        <mxCell id="apps" value="&lt;b&gt;Aplicações no OKE&lt;/b&gt;&lt;br&gt;&lt;br&gt;5 serviços Synced / Healthy&lt;br&gt;2 workers Ready" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#eaf5f0;strokeColor=#cbd5e1;fontColor=#18364b;fontSize=19;spacing=14;align=left;verticalAlign=middle;" vertex="1" parent="1">
+        <mxCell id="apps" value="&lt;b&gt;Aplicações no OKE&lt;/b&gt;&lt;br&gt;&lt;br&gt;5 microsserviços&lt;br&gt;Cluster com 2 workers" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#eaf5f0;strokeColor=#cbd5e1;fontColor=#18364b;fontSize=19;spacing=14;align=left;verticalAlign=middle;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="35" y="565" width="295" height="140" />
         </mxCell>
         <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeWidth=2;strokeColor=#426c88;fontColor=#426c88;fontSize=15;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="publish" target="promotion">
@@ -76,9 +76,6 @@
         </mxCell>
         <mxCell id="e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeWidth=2;strokeColor=#426c88;fontColor=#426c88;fontSize=15;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="core" target="platform">
           <mxGeometry as="geometry" relative="1" />
-        </mxCell>
-        <mxCell id="verified" value="&lt;b&gt;Verificação concluída&lt;/b&gt; · Planos finais de core e platform sem diferenças.&lt;br&gt;Publicação → commit GitOps → sync automático comprovados; API e persistência NoSQL verificadas." style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#eaf5f0;strokeColor=#a9cebd;fontColor=#18364b;fontSize=18;spacing=14;align=left;verticalAlign=middle;" vertex="1" parent="1">
-          <mxGeometry as="geometry" x="35" y="1100" width="1050" height="95" />
         </mxCell>
       </root>
     </mxGraphModel>
