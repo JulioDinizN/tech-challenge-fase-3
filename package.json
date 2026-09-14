@@ -5,9 +5,9 @@
   "description": "POSTECH Tech Challenge Fase 3 delivery workspace.",
   "type": "module",
   "scripts": {
-    "diagrams:export": "node scripts/export-diagrams.mjs",
+    "diagrams:export": "node scripts/docs/export-diagrams.mjs",
     "report:install": "playwright install chromium",
-    "report:pdf": "npm run diagrams:export && node scripts/render-report-pdf.mjs"
+    "report:pdf": "npm run diagrams:export && node scripts/docs/render-report-pdf.mjs"
   },
   "devDependencies": {
     "playwright": "^1.60.0"

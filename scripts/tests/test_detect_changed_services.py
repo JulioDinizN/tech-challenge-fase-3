@@ -5,7 +5,7 @@ from pathlib import Path
 import unittest
 
 
-MODULE_PATH = Path(__file__).with_name("detect_changed_services.py")
+MODULE_PATH = Path(__file__).resolve().parents[1] / "ci/detect_changed_services.py"
 SPEC = importlib.util.spec_from_file_location("detect_changed_services", MODULE_PATH)
 assert SPEC and SPEC.loader
 MODULE = importlib.util.module_from_spec(SPEC)

@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
-const repoRoot = path.resolve(path.dirname(__filename), "..");
+const repoRoot = path.resolve(path.dirname(__filename), "../..");
 const reportHtmlPath = path.join(repoRoot, "docs", "report.html");
 const outputDir = path.join(repoRoot, "dist");
 const outputPath = path.join(outputDir, "delivery-report.pdf");

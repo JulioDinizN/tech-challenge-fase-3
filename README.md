@@ -57,7 +57,7 @@ Os manifests Kubernetes ficam exclusivamente no repositório GitOps. `backend`, 
 Com os providers já inicializados e as dependências Python disponíveis:
 
 ```bash
-PYTHON_BIN=/caminho/do/venv/bin/python ./scripts/prepare-phase3.sh
+PYTHON_BIN=/caminho/do/venv/bin/python ./scripts/validate.sh
 ```
 
 A verificação local não publica imagens nem altera o cluster. O ambiente de demonstração não possui teardown automático; seu encerramento exige revisão dos recursos e dos states descritos no procedimento de operação.

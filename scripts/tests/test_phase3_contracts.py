@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
-spec = importlib.util.spec_from_file_location('detect', Path(__file__).with_name('detect_changed_services.py'))
+spec = importlib.util.spec_from_file_location('detect', ROOT/'scripts/ci/detect_changed_services.py')
 detect = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(detect)
 

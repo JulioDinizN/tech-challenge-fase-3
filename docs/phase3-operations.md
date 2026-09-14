@@ -7,7 +7,7 @@ O Terraform gerencia a infraestrutura e os add-ons. GitHub Actions publica image
 Instalar ferramentas Terraform, kubectl, Python e Docker CLI. Criar um venv e instalar `../tech-challenge-fase-3-gitops/scripts/requirements.txt` nele. Em uma cópia isolada para validação, inicializar os roots com `terraform -chdir=infra/environments/homolog/<root> init -backend=false -input=false`; isso baixa providers, sem configurar state remoto. Não executar esse init sobre um diretório de operação já configurado com backend remoto. Em checkouts de operação, manter o backend existente. Em seguida:
 
 ```bash
-PYTHON_BIN=/caminho/do/venv/bin/python ./scripts/prepare-phase3.sh
+PYTHON_BIN=/caminho/do/venv/bin/python ./scripts/validate.sh
 ```
 
 O script não faz plan, apply, deploy, push ou consultas ao cluster. Scans/testes dos serviços e build/scan das imagens são verificações adicionais do CI. Docker daemon é necessário para build de imagens, mas não para renderizar Compose.
@@ -40,7 +40,7 @@ O primeiro boot da build `1578` completou initramfs/cloud-init, mas revelou um s
 6. Após as cinco imagens existirem, preencher GitOps localmente:
 
    ```bash
-   python3 scripts/configure-phase3-gitops.py \
+   python3 scripts/ops/configure-gitops.py \
      --gitops-root ../tech-challenge-fase-3-gitops \
      --initial-image-tag sha-<12-hex-do-push>
    python3 ../tech-challenge-fase-3-gitops/scripts/validate_structure.py --ready
@@ -72,4 +72,4 @@ O prazo de 20 minutos é para o vídeo editado, não para provisionamento/valida
 
 A OCI Cache adiciona automaticamente a `redis-security-list` à subnet de dados. O Terraform preserva essa associação gerenciada pelo serviço com `ignore_changes` somente em `security_list_ids` dessa subnet; os NSGs do projeto continuam versionados.
 
-O chart NGINX2.6.1 é versionado em `platform/charts` com as referências de schema incorporadas localmente. As permissões de secrets são restritas ao namespace do ingress, e a validação de schema permanece ativa. O script `scripts/vendor-nginx-chart.py` verifica os hashes das fontes e reproduz o arquivo.
+O chart NGINX2.6.1 é versionado em `platform/charts` com as referências de schema incorporadas localmente. As permissões de secrets são restritas ao namespace do ingress, e a validação de schema permanece ativa. O script `scripts/maintenance/vendor-nginx-chart.py` verifica os hashes das fontes e reproduz o arquivo.

@@ -6,8 +6,8 @@ import subprocess
 import tempfile
 import unittest
 
-ROOT = Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location('configure', ROOT/'scripts/configure-phase3-gitops.py')
+ROOT = Path(__file__).resolve().parents[2]
+spec = importlib.util.spec_from_file_location('configure', ROOT/'scripts/ops/configure-gitops.py')
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 SERVICES = ['auth-service','flag-service','targeting-service','evaluation-service','analytics-service']

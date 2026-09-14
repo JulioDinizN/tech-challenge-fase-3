@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const execFileAsync = promisify(execFile);
 const __filename = fileURLToPath(import.meta.url);
-const repoRoot = path.resolve(path.dirname(__filename), "..");
+const repoRoot = path.resolve(path.dirname(__filename), "../..");
 
 const defaultMacDrawio = "/Applications/draw.io.app/Contents/MacOS/draw.io";
 const drawioCandidates = [
