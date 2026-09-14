@@ -96,3 +96,7 @@ A conferência independente por SKU reproduziu o total visível de **US$ 675,20*
 ![Estimativa AWS](aws-calculator.png)
 
 ![Estimativa OCI](oci-calculator.png)
+
+## Ajuste de shape na ativação
+
+O preflight de cotas indicou apenas um PostgreSQL E5 e um E6 disponíveis. O banco flag usa E6 (1 OCPU/16 GB); auth permanece E5 e targeting Standard3. A estimativa oficial arquivada usou E5 para flag. No catálogo Oracle consultado, E6 usa US$ 0,03/OCPU-h (B111129) e US$ 0,002/GB-h (B111130), iguais aos componentes E5 usados no cálculo; a troca não altera o total estimado sob as mesmas premissas. Os exports originais do estimador foram preservados para rastreabilidade.

@@ -19,14 +19,14 @@ O script não faz plan, apply, deploy, push ou consultas ao cluster. Scans/teste
 - `platform`: Helm gerencia CSI, provider OCI, Metrics Server, NGINX Ingress e Argo. API Argo permanece ClusterIP, acessada por port-forward.
 - `infra/oci`: legado da Fase 2. Não aplicar legado e core sobre os mesmos recursos. Nenhum state foi migrado nesta preparação. Antes de usar um compartimento que já tenha recursos, inventariar os states e planejar import/migração; não aplicar core cegamente.
 
-Core exige região, OCIDs, IP permitido, versão Kubernetes e imagem OKE compatível. O exemplo usa Ashburn, workers E5 e PostgreSQL E5/Standard3. A imagem no exemplo é candidata histórica: consultar disponibilidade e quotas na janela de preparação cloud antes do plan. Core e platform usam chaves distintas do backend. Não versionar `.tfvars`, `backend.hcl`, kubeconfig, state ou planos salvos.
+Core exige região, OCIDs, IP permitido, versão Kubernetes e imagem OKE compatível. O exemplo usa Ashburn, workers E5 e PostgreSQL E5/Standard3. A imagem foi validada no preflight; reconfirmar disponibilidade e quotas antes do apply. O ambiente usa PostgreSQL E5 para auth, E6 para flag e Standard3 para targeting, conforme cotas por shape. Core e platform usam chaves distintas do backend. Não versionar `.tfvars`, `backend.hcl`, kubeconfig, state ou planos salvos.
 
 ## Sequência futura de ativação — somente com autorização
 
 1. Aceitação OCI confirmada pelo responsável em 13/09/2026. Confirmar quotas, shapes, imagem/Kubernetes, orçamento e ausência de propriedade duplicada. Preparar bucket privado/versionado; verificar state remoto dos roots.
 2. Revisar `core plan` e então provisionar. Criar kubeconfig no caminho privado e confirmar seu contexto. Preencher `platform/terraform.tfvars` com outputs de rede do core e o contexto explícito; `bootstrap_gitops=false` inicialmente.
 3. Revisar e provisionar platform. Nenhum workload do projeto depende de scripts `kubectl apply` do legado. Se charts já existirem, importar releases antes de aplicar, evitando dois donos.
-4. Configurar GitHub Variables `OCIR_REGISTRY`, `OCIR_NAMESPACE`, `OCIR_REPOSITORY_PREFIX`; o prefixo deve ser o `project_name` do core. Secrets de publicação: OCIR_USERNAME, OCIR_AUTH_TOKEN e GITOPS_TOKEN de escopo mínimo. Nenhuma senha de aplicação vai ao CI. Segurança é obrigatória e independe de SECURITY_GATE_ENABLED.
+4. Configurar GitHub Variables `OCIR_REGISTRY`, `OCIR_NAMESPACE`, `OCIR_REPOSITORY_PREFIX`; o prefixo deve ser o `project_name` do core. Secrets de publicação: OCIR_USERNAME, OCIR_AUTH_TOKEN e GITOPS_SSH_KEY (chave de deploy com escrita restrita ao GitOps). Nenhuma senha de aplicação vai ao CI. Segurança é obrigatória e independe de SECURITY_GATE_ENABLED.
 5. Publicar uma base dos cinco serviços a partir de um push na main com alteração compartilhada revisada e `ENABLE_OCIR_PUBLISH=true`, mantendo `ENABLE_GITOPS_PROMOTION=false` nesta primeira publicação. `workflow_dispatch` valida, mas não publica. Verificar imagem/digest de cada serviço. Não usar push manual de imagem como evidência de CI.
 6. Após as cinco imagens existirem, preencher GitOps localmente:
 

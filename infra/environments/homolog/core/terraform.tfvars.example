@@ -41,7 +41,7 @@ postgres_memory_in_gbs = {
 }
 postgres_shapes = {
   auth-service      = "PostgreSQL.VM.Standard.E5.Flex"
-  flag-service      = "PostgreSQL.VM.Standard.E5.Flex"
+  flag-service      = "PostgreSQL.VM.Standard.E6.Flex"
   targeting-service = "PostgreSQL.VM.Standard3.Flex"
 }
 redis_node_count         = 1

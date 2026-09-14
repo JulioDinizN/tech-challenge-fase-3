@@ -106,7 +106,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: JulioDinizN/tech-challenge-fase-3-gitops
-          token: ${{ secrets.GITOPS_TOKEN }}
+          ssh-key: ${{ secrets.GITOPS_SSH_KEY }}
           path: gitops
 
       - name: Download all promotion descriptors
