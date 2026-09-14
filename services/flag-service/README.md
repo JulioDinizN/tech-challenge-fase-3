@@ -106,3 +106,7 @@ curl -X PUT http://localhost:8002/flags/enable-new-dashboard \
 -d '{"is_enabled": false}'
 ```
 Saída esperada: (O JSON da flag atualizada, com `"is_enabled": false`).
+
+## Delivery verification
+
+Changes to this service pass unit tests, lint, SAST, dependency scanning and container scanning before publication. The main-branch image uses an immutable commit tag, and its promotion is recorded in the dedicated GitOps repository before Argo CD reconciles the deployment.
