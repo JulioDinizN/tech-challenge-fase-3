@@ -1,91 +1,67 @@
-# POSTECH Tech Challenge - Fase 3
+# POSTECH Tech Challenge — Fase 3
 
-Repositório principal do ToggleMaster para a Fase 3. Ele preserva a implementação validada na Fase 2 e acrescenta a implementação de infraestrutura como código, CI/DevSecOps e promoção GitOps.
+ToggleMaster: cinco microsserviços com infraestrutura Terraform, CI/DevSecOps no GitHub Actions e entrega automática por GitOps no OCI Kubernetes Engine (OKE).
 
-## Estado atual
+## Repositórios e entrega
 
-Esta primeira entrega contém somente código e estrutura local. Nenhuma infraestrutura OCI foi criada, alterada ou removida.
+- [Código, infraestrutura e CI](https://github.com/JulioDinizN/tech-challenge-fase-3).
+- [Estado desejado Kubernetes](https://github.com/JulioDinizN/tech-challenge-fase-3-gitops).
+- [Documentação](docs/README.md), [relatório](docs/report.html) e [estimativas AWS/OCI](docs/costs/README.md).
 
-Revisão local de 13/09/2026: **planos preliminares backend/core e validação local aprovados; demonstração integrada ainda pendente**. Veja os [diagramas de entrega e runtime](docs/architecture.md). O relatório da Fase 3 está preparado como rascunho, pendente do vídeo e das evidências reais.
+## Fluxo de entrega
 
-| Área | Estado |
-| --- | --- |
-| Microsserviços, Docker e Compose da Fase 2 | Preservados |
-| Terraform OCI da Fase 2 | Preservado em infra/oci durante a migração |
-| Estrutura Terraform modular da Fase 3 | Roots backend/core/platform e módulo funcional oci-runtime |
-| CI de monorepo | Detecção, matriz, gates obrigatórios e publicação isolada |
-| Publicação no OCIR | Desabilitada por padrão |
-| Promoção para o GitOps | Desabilitada por padrão |
-| Deploy no OKE | Não executado |
+```text
+Pull Request → detecção de serviços → testes → lint → SAST/SCA → build/scan
+Push na main → mesmas validações → publicação da imagem escaneada no OCIR
+             → commit com as tags no GitOps → reconciliação automática pelo Argo CD
+```
 
-## Repositórios
+Cada serviço utiliza um workflow reutilizável, selecionado por uma matriz de arquivos alterados. Mudanças compartilhadas selecionam os cinco serviços. PRs validam sem credenciais de publicação. Na main, toda a matriz precisa passar antes da publicação. Um único job reúne as tags em um commit GitOps.
 
-- Código, infraestrutura e CI: JulioDinizN/tech-challenge-fase-3
-- Estado desejado Kubernetes: JulioDinizN/tech-challenge-fase-3-gitops
-
-O repositório GitOps é separado para que o CI publique imagens e altere somente tags. O Argo CD será o único responsável por reconciliar os workloads no OKE.
-
-## Fluxo planejado
-
-~~~text
-Pull Request
-  -> detectar serviços alterados
-  -> testes, lint, SAST, SCA, build e scan da imagem
-  -> sem credenciais OCI e sem push
-
-Push na main
-  -> repetir todos os gates
-  -> publicar somente as imagens alteradas no OCIR com tag sha-*
-  -> gerar descritores de promoção
-  -> atualizar todas as tags afetadas em um único commit GitOps
-  -> Argo CD sincronizar somente as aplicações alteradas
-~~~
+O Terraform provisiona a infraestrutura a partir de uma execução autenticada com state remoto. Seu CI verifica formatação, configuração e segurança; não executa plan/apply. O CI de aplicações não aplica manifests no cluster.
 
 ## Estrutura
 
-~~~text
-.ci/                         # Catálogo e versões das ferramentas de CI
-.github/workflows/           # CI de serviços e validação de Terraform
-services/                    # Cinco microsserviços importados na Fase 2
-docker/                      # Inicialização do ambiente local
-docker-compose.yml           # Topologia local de nove contêineres
-infra/oci/                   # Terraform funcional herdado da Fase 2
+```text
+.ci/                         # Catálogo de serviços e ferramentas
+.github/workflows/           # Validação, publicação e promoção
+services/                    # auth, flag, targeting, evaluation e analytics
+docker/                      # Inicialização dos bancos de desenvolvimento
+docker-compose.yml           # Ambiente local
 infra/environments/homolog/  # Roots backend, core e platform
-infra/modules/               # Módulo funcional oci-runtime
-scripts/ci/                  # Detecção e promoção sem dependências externas
-docs/decisions/              # ADRs da arquitetura da Fase 3
-~~~
+infra/modules/oci-runtime/   # Recursos OCI separados por responsabilidade
+scripts/ci/                  # Detecção de alterações e promoção GitOps
+scripts/                     # Bootstrap, verificações e geração dos documentos
+docs/                        # Arquitetura, operação, decisões, custos e relatório
+```
 
-## Controles de ativação
+Os manifests Kubernetes ficam exclusivamente no repositório GitOps. `backend`, `core` e `platform` representam responsabilidades com states separados de um único ambiente de homologação.
 
-- Lint/SAST/SCA e scan de imagem são bloqueantes; não dependem de SECURITY_GATE_ENABLED.
-- ENABLE_OCIR_PUBLISH=true permite push ao OCIR somente na main.
-- ENABLE_GITOPS_PROMOTION=true permite atualizar o GitOps depois da publicação.
+## Segurança e ativação
 
-Enquanto essas variáveis estiverem ausentes ou diferentes de true, os workflows não publicam imagens nem alteram o GitOps. Deploy continua fora do CI mesmo após a ativação.
+- Testes, lint, SAST/SCA e scan de imagem são bloqueantes. Trivy reprova achados CRITICAL.
+- `ENABLE_OCIR_PUBLISH=true` permite publicar imagens somente em pushes na main.
+- `ENABLE_GITOPS_PROMOTION=true` permite atualizar o GitOps após a publicação.
+- OCI Vault fornece segredos de runtime via Workload Identity e Secrets Store CSI.
+- Publicação recebe somente `OCIR_USERNAME` e `OCIR_AUTH_TOKEN`; promoção usa `GITOPS_SSH_KEY` com escrita restrita ao GitOps.
+- Registry, namespace e prefixo OCIR são GitHub Variables não secretas.
+- Arquivos reais de parâmetros, autenticação, state e planos salvos ficam fora do controle de versão. Modelos `.example` documentam a configuração.
 
-## Segredos e identidades
+## Desenvolvimento e operação
 
-OCI Vault continua como fonte dos segredos de runtime, consumidos no OKE por Workload Identity e Secrets Store CSI. O CI não lê senhas de banco, MASTER_KEY ou chaves internas.
+- [Desenvolvimento local](docs/local-development.md).
+- [Validação, bootstrap e encerramento](docs/phase3-operations.md).
+- [Catálogo de scripts](scripts/README.md).
+- [Arquitetura e diagramas](docs/architecture.md).
 
-A publicação utiliza os Secrets OCIR_USERNAME e OCIR_AUTH_TOKEN para autenticação no OCIR, além de GITOPS_SSH_KEY, uma chave de deploy com escrita restrita ao repositório GitOps. OCIR_REGISTRY, OCIR_NAMESPACE e OCIR_REPOSITORY_PREFIX são GitHub Variables não secretas.
+Com os providers já inicializados e as dependências Python disponíveis:
 
-## Validação local
+```bash
+PYTHON_BIN=/caminho/do/venv/bin/python ./scripts/prepare-phase3.sh
+```
 
-~~~bash
-python3 scripts/ci/detect_changed_services.py --base HEAD --head HEAD
-python3 -m unittest discover -s scripts/ci -p 'test_*.py'
-terraform fmt -check -recursive infra
-terraform -chdir=infra/oci init -backend=false
-terraform -chdir=infra/oci validate
-~~~
-
-Esses comandos não fazem deploy.
+A verificação local não publica imagens nem altera o cluster. O ambiente de demonstração não possui teardown automático; seu encerramento exige revisão dos recursos e dos states descritos no procedimento de operação.
 
 ## Proveniência
 
-Base derivada de JulioDinizN/tech-challenge-fase-2 no commit 00bc8a4565aeaba4dc65212251c98f7df465d0f1.
-
-## Ambiente de demonstração
-
-Somente `homolog` será usado. O enunciado não exige ambientes separados de homologação e produção. `backend`, `core` e `platform` separam responsabilidades e states, não ambientes duplicados. O módulo `oci-runtime` compõe os recursos OCI, separados em arquivos por responsabilidade; não há cinco submódulos independentes. Procedimento de ativação e encerramento em [operações](docs/phase3-operations.md).
+Os serviços evoluem da Fase 2, commit `00bc8a4565aeaba4dc65212251c98f7df465d0f1` de `JulioDinizN/tech-challenge-fase-2`. A entrega atual mantém somente a infraestrutura e a automação da Fase 3.

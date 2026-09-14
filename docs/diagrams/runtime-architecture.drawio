@@ -14,7 +14,7 @@
         <mxCell id="title" value="Fase 3 • Runtime ToggleMaster na Oracle Cloud Infrastructure" style="text;html=1;strokeColor=none;fillColor=none;whiteSpace=wrap;rounded=0;verticalAlign=middle;fontColor=#0f172a;fontSize=27;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="370" y="92" width="1020" height="38" as="geometry" />
         </mxCell>
-        <mxCell id="subtitle" value="ARQUITETURA ALVO • Workloads migrados para GitOps; implantação e validação real da Fase 3 pendentes." style="text;html=1;strokeColor=none;fillColor=none;whiteSpace=wrap;rounded=0;verticalAlign=middle;fontColor=#0f172a;fontSize=14;fontColor=#b45309;fontStyle=1;" vertex="1" parent="1">
+        <mxCell id="subtitle" value="ARQUITETURA DE RUNTIME • Microsserviços no OKE, estado desejado no GitOps e segredos no OCI Vault." style="text;html=1;strokeColor=none;fillColor=none;whiteSpace=wrap;rounded=0;verticalAlign=middle;fontColor=#0f172a;fontSize=14;fontColor=#b45309;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="370" y="132" width="980" height="26" as="geometry" />
         </mxCell>
         <mxCell id="client" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;arcSize=8;fillColor=#ffffff;strokeColor=#475569;fontColor=#0f172a;" vertex="1" parent="1">

@@ -4,7 +4,7 @@
 
 - This repository owns service sources, local Docker, Terraform, CI, scripts, and delivery documentation.
 - Kubernetes desired state belongs in JulioDinizN/tech-challenge-fase-3-gitops.
-- Preserve working Phase 2 behavior while Phase 3 automation is introduced.
+- Preserve service contracts and the separation between Terraform infrastructure and GitOps workloads.
 
 ## Hard boundaries
 
@@ -23,13 +23,14 @@
 - Consolidate promotions into one GitOps commit.
 - Use immutable sha-<12 hex> tags; never deploy latest.
 
-## Terraform migration
+## Terraform ownership
 
-- infra/oci remains the functional Phase 2 root until deliberately migrated.
-- Phase 3 roots are infra/environments/homolog/core and platform.
-- core owns OCI resources; platform will own add-ons and Argo bootstrap.
+- The only roots are infra/environments/homolog/backend, core and platform.
+- backend owns the state bucket; core owns OCI resources through modules/oci-runtime.
+- platform owns cluster add-ons and Argo bootstrap through Helm.
 - Use native OCI backends with distinct Object Storage keys.
-- Never own the same OCI resource from legacy and modular states.
+- Application manifests belong only in the GitOps repository.
+- Never change state ownership as part of documentation or repository cleanup.
 
 ## Secrets
 

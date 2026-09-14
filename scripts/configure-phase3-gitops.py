@@ -1,22 +1,82 @@
 #!/usr/bin/env python3
 """Fill non-secret GitOps placeholders from core outputs. Never applies or pushes."""
 import argparse
-import importlib.util
 import json
 from pathlib import Path
 import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location('legacy_renderer', ROOT/'scripts/render-oci-manifests.py')
-renderer = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(renderer)
+
+def required(mapping, key):
+    value = mapping[key]
+    if value is None or value == "":
+        raise ValueError(f"Terraform output {key} is empty")
+    return str(value)
+
+
+def replacements(outputs, image_tag):
+    context = outputs["deployment_context"]
+    databases = outputs["postgresql_systems"]
+    repositories = outputs["ocir_repositories"]
+    vault = outputs["vault"]
+    names = vault["secret_names"]
+
+    values = {
+        "__IMAGE_TAG__": image_tag,
+        "__OCI_REGION__": required(context, "region"),
+        "__OCI_COMPARTMENT_OCID__": required(context, "compartment_id"),
+        "__OCI_AUTH_DB_HOST__": required(databases["auth-service"], "private_ip"),
+        "__OCI_FLAG_DB_HOST__": required(databases["flag-service"], "private_ip"),
+        "__OCI_TARGETING_DB_HOST__": required(
+            databases["targeting-service"], "private_ip"
+        ),
+        "__OCI_REDIS_URL__": required(outputs["redis"], "tls_url"),
+        "__OCI_QUEUE_OCID__": required(outputs["evaluation_queue"], "id"),
+        "__OCI_QUEUE_MESSAGES_ENDPOINT__": required(
+            outputs["evaluation_queue"], "messages_endpoint"
+        ),
+        "__OCI_NOSQL_TABLE_OCID__": required(outputs["analytics_table"], "id"),
+        "__OCI_VAULT_ID__": required(vault, "id"),
+        "__OCI_AUTH_ADMIN_PASSWORD_SECRET_NAME__": required(
+            names["postgres_admin_passwords"], "auth-service"
+        ),
+        "__OCI_FLAG_ADMIN_PASSWORD_SECRET_NAME__": required(
+            names["postgres_admin_passwords"], "flag-service"
+        ),
+        "__OCI_TARGETING_ADMIN_PASSWORD_SECRET_NAME__": required(
+            names["postgres_admin_passwords"], "targeting-service"
+        ),
+        "__OCI_AUTH_APP_PASSWORD_SECRET_NAME__": required(
+            names["postgres_app_passwords"], "auth-service"
+        ),
+        "__OCI_FLAG_APP_PASSWORD_SECRET_NAME__": required(
+            names["postgres_app_passwords"], "flag-service"
+        ),
+        "__OCI_TARGETING_APP_PASSWORD_SECRET_NAME__": required(
+            names["postgres_app_passwords"], "targeting-service"
+        ),
+        "__OCI_AUTH_MASTER_KEY_SECRET_NAME__": required(names, "auth_master_key"),
+        "__OCI_INTERNAL_API_KEY_SECRET_NAME__": required(names, "internal_api_key"),
+    }
+
+    for service in (
+        "auth-service",
+        "flag-service",
+        "targeting-service",
+        "evaluation-service",
+        "analytics-service",
+    ):
+        token = f"__OCIR_{service.upper().replace('-', '_')}_IMAGE__"
+        values[token] = required(repositories[service], "image_path")
+
+    return values
 
 
 def configure(outputs, gitops, tag):
     if not re.fullmatch(r'sha-[0-9a-f]{12}', tag):
         raise ValueError('initial image tag must be sha-<12 hex> and already published for all five services')
-    values = renderer.replacements(outputs, tag)
+    values = replacements(outputs, tag)
     pending = {}
     for p in list((gitops/'apps').rglob('*.yaml')) + list((gitops/'platform').rglob('*.yaml')):
         text = p.read_text()

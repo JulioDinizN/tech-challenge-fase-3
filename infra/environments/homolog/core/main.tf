@@ -1,4 +1,4 @@
-# Fresh Phase 3 ownership. Never apply alongside legacy infra/oci for the same resources.
+# Core owns OCI resources through the oci-runtime module.
 provider "oci" {
   region              = var.region
   config_file_profile = var.oci_config_profile

@@ -44,6 +44,16 @@ class ConfigureTests(unittest.TestCase):
                 self.assertNotIn('__OCI_',result)
             self.assertNotIn('__OCI_',subprocess.check_output(['kubectl','kustomize',str(dst/'platform/overlays/homolog')],text=True))
 
+    def test_core_outputs_replace_bootstrap_placeholders(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root/'apps').mkdir()
+            (root/'platform').mkdir()
+            target = root/'platform/resources.yaml'
+            target.write_text('region: __OCI_REGION__\nhost: __OCI_AUTH_DB_HOST__\nvault: __OCI_VAULT_ID__\n')
+            module.configure(fixture(), root, 'sha-123456789abc')
+            self.assertEqual(target.read_text(), 'region: us-ashburn-1\nhost: 10.0.32.10\nvault: ocid1.vault.oc1.iad.fixture\n')
+
     def test_unpublished_style_tag_and_yaml_injection_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp)

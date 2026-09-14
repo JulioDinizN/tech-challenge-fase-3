@@ -7,7 +7,10 @@ python_bin="${PYTHON_BIN:-python3}"
 gitops_root="${GITOPS_ROOT:-$repo/../tech-challenge-fase-3-gitops}"
 "$python_bin" -m unittest discover -s scripts/ci -p 'test_*.py' -v
 "$python_bin" -m unittest discover -s scripts -p 'test_*.py' -v
-terraform fmt -check -recursive infra
+# Check source files only; do not format ignored environment parameters.
+while IFS= read -r -d '' file; do
+  [[ -f "$file" ]] && terraform fmt -check "$file"
+done < <(git ls-files -z 'infra/*.tf' 'infra/**/*.tf')
 for root in backend core platform; do
   terraform -chdir="infra/environments/homolog/$root" validate
 done

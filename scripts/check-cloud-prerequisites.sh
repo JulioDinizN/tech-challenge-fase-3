@@ -13,12 +13,6 @@ for command in "${required[@]}"; do
   fi
 done
 
-if command -v hey >/dev/null; then
-  printf '%-12s %s\n' hey "$(command -v hey)"
-else
-  printf '%-12s %s\n' hey "optional; load-test-oke.sh will use its Python fallback"
-fi
-
 if ((${#missing[@]})); then
   echo "Install the missing commands before the OCI deployment window: ${missing[*]}" >&2
   exit 1

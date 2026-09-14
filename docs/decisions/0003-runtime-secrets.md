@@ -2,7 +2,7 @@
 
 ## Status
 
-Aceita para o scaffold.
+Adotada.
 
 ## Decisão
 

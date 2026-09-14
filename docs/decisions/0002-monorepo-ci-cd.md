@@ -2,7 +2,7 @@
 
 ## Status
 
-Implementada; execução remota pendente.
+Implementada.
 
 ## Decisão
 

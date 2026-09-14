@@ -1,5 +1,9 @@
-# Core OCI — Fase 3
+# Core — infraestrutura OCI
 
-Root da infraestrutura, compondo `../../../modules/oci-runtime`. Copiar e preencher `terraform.tfvars.example` e `backend.hcl.example` em arquivos ignorados pelo Git. Usar backend remoto privado/versionado e a chave core.tfstate.
+Root que instancia `../../../modules/oci-runtime`: rede, OKE, registros OCIR, bancos, cache, fila, NoSQL, Vault e IAM.
 
-`init -backend=false` e `validate` são verificações locais. Antes de plan/apply, confirmar imagem, Kubernetes, quotas e dono dos recursos. Não aplicar em paralelo com o legado `infra/oci`. A preparação não migrou state. A imagem do exemplo foi confirmada na OCI em 2026-09-13; disponibilidade deve ser reconfirmada antes de aplicar. Procedimento completo em `docs/phase3-operations.md` na raiz do repositório.
+Os parâmetros de ambiente usam `terraform.tfvars.example` e `backend.hcl.example` como modelos. Os arquivos reais são locais e ignorados pelo Git. O backend remoto usa a chave própria de core, separada de backend e platform.
+
+Para um checkout já inicializado, executar `terraform -chdir=infra/environments/homolog/core plan -input=false`. Não inicializar sem backend sobre um diretório de operação já configurado. Antes de uma nova implantação, conferir disponibilidade da imagem OKE, versão Kubernetes, quotas, shapes e proprietário de cada recurso.
+
+Procedimento completo em [operações](../../../../docs/phase3-operations.md).
