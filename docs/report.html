@@ -1,188 +1,21 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Relatório de Entrega - Tech Challenge Fase 3 - Grupo 76</title>
-    <style>
-      @page {
-        size: A4;
-        margin: 14mm;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        color: #111827;
-        background: #ffffff;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-        font-size: 11pt;
-        line-height: 1.45;
-      }
-
-      main {
-        max-width: 182mm;
-        margin: 0 auto;
-      }
-
-      h1,
-      h2,
-      h3,
-      p {
-        margin-top: 0;
-      }
-
-      h1 {
-        margin-bottom: 3mm;
-        color: #0f172a;
-        font-size: 24pt;
-        line-height: 1.1;
-      }
-
-      h2 {
-        margin: 8mm 0 3mm;
-        padding-bottom: 1.5mm;
-        border-bottom: 1px solid #cbd5e1;
-        color: #0f172a;
-        font-size: 15pt;
-      }
-
-      h3 {
-        margin: 4mm 0 2mm;
-        color: #1e293b;
-        font-size: 12pt;
-      }
-
-      p {
-        margin-bottom: 2.5mm;
-      }
-
-      ul,
-      ol {
-        margin: 0 0 3mm;
-        padding-left: 6mm;
-      }
-
-      li {
-        margin-bottom: 1.2mm;
-      }
-
-      a {
-        color: #1d4ed8;
-        overflow-wrap: anywhere;
-        text-decoration: none;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 2mm;
-      }
-
-      th,
-      td {
-        padding: 2.4mm 2.8mm;
-        border: 1px solid #d7dee8;
-        text-align: left;
-        vertical-align: top;
-      }
-
-      th {
-        width: 34%;
-        background: #f1f5f9;
-        color: #334155;
-        font-weight: 700;
-      }
-
-      .cover {
-        margin-bottom: 7mm;
-        padding: 6mm;
-        border: 1px solid #cbd5e1;
-        border-radius: 6px;
-        background: #f8fafc;
-      }
-
-      .eyebrow {
-        margin-bottom: 2mm;
-        color: #64748b;
-        font-size: 9pt;
-        font-weight: 700;
-        text-transform: uppercase;
-      }
-
-      .subtitle {
-        margin-bottom: 0;
-        color: #475569;
-      }
-
-      .pending {
-        color: #92400e;
-        font-weight: 700;
-      }
-
-      .status {
-        display: inline-block;
-        padding: 0.5mm 1.5mm;
-        border-radius: 999px;
-        background: #dcfce7;
-        color: #166534;
-        font-size: 9pt;
-        font-weight: 700;
-      }
-
-      .status.waiting {
-        background: #fef3c7;
-        color: #92400e;
-      }
-
-      .page-break {
-        break-before: page;
-      }
-
-      .diagram {
-        margin: 2mm 0 0;
-        page-break-inside: avoid;
-      }
-
-      .diagram img {
-        display: block;
-        width: 100%;
-        max-height: 128mm;
-        border: 1px solid #d7dee8;
-        object-fit: contain;
-      }
-
-      .diagram-placeholder {
-        padding: 4mm;
-        border: 1px dashed #94a3b8;
-        background: #f8fafc;
-        color: #475569;
-      }
-
-      .note {
-        margin-top: 8mm;
-        padding: 3mm 4mm;
-        border-left: 4px solid #cbd5e1;
-        background: #f8fafc;
-        color: #475569;
-      }
-
-      @media screen {
-        body {
-          background: #e5e7eb;
-          padding: 16px;
-        }
-
-        main {
-          min-height: 297mm;
-          padding: 14mm;
-          background: #ffffff;
-          box-shadow: 0 12px 34px rgba(15, 23, 42, 0.12);
-        }
-      }
-    </style>
-  </head>
-  <body><main><h1>Tech Challenge — Fase 3</h1><p><strong>Rascunho: completar vídeo e evidências reais antes de submeter.</strong></p><p>TECH CHALLENGE — FASE 3 — TOGGLEMASTER<br>Rascunho de entrega atualizado em 13/09/2026. Finalizar após demonstração.</p><p>PARTICIPANTE<br>Julio Cesar Diniz Nogueira — RM373719 — Grupo 76.<br>Identificação preservada do projeto; conferir antes da submissão.</p><p>LINKS<br>Código, CI e infraestrutura: <a href="https://github.com/JulioDinizN/tech-challenge-fase-3">https://github.com/JulioDinizN/tech-challenge-fase-3</a><br>GitOps: <a href="https://github.com/JulioDinizN/tech-challenge-fase-3-gitops">https://github.com/JulioDinizN/tech-challenge-fase-3-gitops</a><br>Documentação: <a href="https://github.com/JulioDinizN/tech-challenge-fase-3/tree/main/docs">https://github.com/JulioDinizN/tech-challenge-fase-3/tree/main/docs</a><br>Vídeo da Fase 3: PENDENTE — preencher após gravar e publicar vídeo de até 20 minutos.<br>Os links dos repositórios precisam conter a versão final e ter acesso verificado para avaliação.</p><p>SOLUÇÃO E DECISÕES<br>Cinco microsserviços, IaC, DevSecOps e GitOps. OCI foi aceita pela disciplina conforme confirmação do responsável pelo projeto em 13/09/2026. Equivalências: VPC/VCN, EKS/OKE, RDS/OCI PostgreSQL, ElastiCache/OCI Cache, SQS/OCI Queue, DynamoDB/OCI NoSQL, ECR/OCIR e S3/Object Storage. A estimativa AWS exigida acompanha a entrega.</p><p>Um único ambiente homolog temporário. Não há ambiente production duplicado. Terraform separa backend, core e platform em states distintos; core instancia o módulo composto oci-runtime. Platform instala Argo CD via Helm. CI testa, analisa e escaneia cada serviço em jobs separados; somente após aprovação publica imagens imutáveis e atualiza tags no GitOps. Argo realiza a entrega automática. Segredos de runtime ficam no OCI Vault, com Workload Identity e CSI; credenciais de publicação não são repassadas aos jobs de validação.</p><p>DESAFIOS<br>Preservar os contratos dos cinco serviços; separar validação sem credenciais da publicação; garantir dono único dos recursos Kubernetes; coordenar inicialização dos bancos e secrets; corrigir uma imagem OKE histórica rejeitada pelo plan, substituindo por imagem disponível e compatível com E5; preparar teardown na ordem correta para o Load Balancer gerenciado pelo Kubernetes.</p><p>CUSTOS E ANEXOS<br>AWS: US$ 1.077,49 por 730 horas, sem free tier.<br>OCI: US$ 675,20 por 744 horas no estimador; US$ 672,20 por 730 horas sem franquias para comparação.<br>Premissas e limitações em docs/costs/README.md; estes valores mensais não são orçamento exato de uma sessão de gravação.<br>AWS: <a href="https://calculator.aws/#/estimate?id=b49777aec14492a057f24a0d2a39f829464dbd85">https://calculator.aws/#/estimate?id=b49777aec14492a057f24a0d2a39f829464dbd85</a><br>OCI: <a href="https://www.oracle.com/cloud/costestimator.html">https://www.oracle.com/cloud/costestimator.html</a> (importar docs/costs/oci-estimate.json para restaurar a configuração).<br>Prints: docs/costs/aws-calculator.png, aws-calculator-details.png e oci-calculator.png.<br>PDFs anexos: docs/costs/aws-estimate.pdf e oci-estimate.pdf.</p><p>VALIDAÇÃO ATUAL E EVIDÊNCIAS A COMPLETAR<br>Planos preliminares: backend 1 criar e core 56 criar, nenhum alterar/destruir. State local isolado somente para análise, pois o bucket remoto não estava disponível; ainda gerar o plan definitivo com backend remoto. Terraform validate aprovado nos três roots; GitOps renderiza 32 recursos. Testes dos cinco serviços aprovados. Cinco imagens linux/amd64 construídas e escaneadas localmente com Trivy 0.74.0, sem vulnerabilidades CRITICAL após atualizar as bases Go/Alpine e pacotes Debian. Containers ainda não executados nesta revisão. Nenhum recurso foi criado nesta preparação.<br>PENDENTE: registrar runs de segurança vermelho e verde; SHA/tag/digest e commit automático GitOps; cinco serviços saudáveis no Argo; sync automático; recursos e backend remoto efetivos. Não apresentar validações da Fase 2 como evidências da Fase 3.<br>PENDENTE: conferir captura, duração, áudio, anonimização de credenciais, links, identificação e encerramento dos recursos.<br></p><section class="page-break"><h2>Estimativa AWS — captura oficial</h2><img style="display:block;width:100%;max-height:240mm;object-fit:contain;break-inside:avoid" src="costs/aws-calculator.png" alt="Resumo AWS"><img style="display:block;width:100%;max-height:240mm;object-fit:contain;break-inside:avoid" src="costs/aws-calculator-details.png" alt="Detalhamento AWS"></section><section class="page-break"><h2>Estimativa OCI — captura oficial</h2><img style="display:block;width:100%;max-height:240mm;object-fit:contain;break-inside:avoid" src="costs/oci-calculator.png" alt="Estimativa OCI"></section></main></body></html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ToggleMaster | Relatório de entrega — Fase 3</title>
+<style>@page{size:A4;margin:16mm 17mm}*{box-sizing:border-box}body{margin:0;color:#243248;background:#edf0f4;font:15px/1.6 Arial,sans-serif}main{max-width:960px;margin:32px auto;background:white;padding:56px 64px;box-shadow:0 8px 36px #14233b12}header{border-top:7px solid #183d59;padding-top:24px;margin-bottom:32px}.eyebrow{color:#4c6a80;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:bold}h1{font-size:38px;line-height:1.15;color:#15364e;margin:12px 0}h2{font-size:20px;color:#183d59;border-bottom:1px solid #d7e0e7;padding-bottom:8px;margin:28px 0 12px;break-after:avoid}p{margin:0 0 16px;overflow-wrap:anywhere}a{color:#185c8d;overflow-wrap:anywhere}strong{color:#15364e}.notice{padding:12px 16px;background:#fff6df;border-left:3px solid #c18d28;font-size:13px}.meta{color:#536478}.appendix{break-before:page;margin-top:44px}figure{margin:16px 0;break-inside:avoid}img{display:block;max-width:100%;height:auto;margin:auto}figcaption{font-size:12px;color:#536478;margin-top:10px}footer{border-top:1px solid #d7e0e7;margin-top:32px;padding-top:12px;font-size:12px;color:#536478}@media(max-width:640px){main{margin:0;padding:24px}h1{font-size:30px}}@media print{body{background:white;font-size:10pt;line-height:1.5}main{padding:0;margin:0;max-width:none;box-shadow:none}header{margin-bottom:7mm;padding-top:5mm}h1{font-size:27pt}h2{font-size:14pt;margin-top:7mm}p{orphans:3;widows:3}a{text-decoration:none}.appendix{margin-top:0}.appendix img{max-height:225mm;object-fit:contain}.notice{font-size:9pt}footer{break-inside:avoid}}</style></head>
+<body><main>
+<header><div class="eyebrow">POSTECH · Grupo 76 · Fase 3</div><h1>ToggleMaster</h1><p class="meta">Relatório de entrega · Infraestrutura e DevSecOps<br>Atualizado em 14 de setembro de 2026</p></header>
+<p class="notice"><strong>Preparação para submissão:</strong> infraestrutura e fluxo de entrega verificados. Inserir o link do vídeo após a gravação.</p>
+<section><h2>Participante</h2><p>Julio Cesar Diniz Nogueira — RM373719 — Grupo 76.<br>Identificação preservada do projeto; conferir antes da submissão.</p></section>
+<section><h2>Links</h2><p>Código, CI e infraestrutura: <a href="https://github.com/JulioDinizN/tech-challenge-fase-3">https://github.com/JulioDinizN/tech-challenge-fase-3</a><br>GitOps: <a href="https://github.com/JulioDinizN/tech-challenge-fase-3-gitops">https://github.com/JulioDinizN/tech-challenge-fase-3-gitops</a><br>Documentação: <a href="https://github.com/JulioDinizN/tech-challenge-fase-3/tree/main/docs">https://github.com/JulioDinizN/tech-challenge-fase-3/tree/main/docs</a><br>Vídeo da Fase 3: PENDENTE — preencher após gravar e publicar vídeo de até 20 minutos.<br>Os links dos repositórios precisam conter a versão final e ter acesso verificado para avaliação.</p></section>
+<section><h2>Solução e decisões</h2><p>Cinco microsserviços, IaC, DevSecOps e GitOps. OCI foi aceita pela disciplina conforme confirmação do responsável pelo projeto em 13/09/2026. Equivalências: VPC/VCN, EKS/OKE, RDS/OCI PostgreSQL, ElastiCache/OCI Cache, SQS/OCI Queue, DynamoDB/OCI NoSQL, ECR/OCIR e S3/Object Storage. A estimativa AWS exigida acompanha a entrega.</p></section>
+<p>Um único ambiente homolog temporário. Não há ambiente production duplicado. Terraform separa backend, core e platform em states distintos; core instancia o módulo composto oci-runtime. Platform instala Argo CD via Helm. CI testa, analisa e escaneia cada serviço em jobs separados; somente após aprovação publica imagens imutáveis e atualiza tags no GitOps. Argo realiza a entrega automática. Segredos de runtime ficam no OCI Vault, com Workload Identity e CSI; credenciais de publicação não são repassadas aos jobs de validação.</p>
+<section><h2>Desafios</h2><p>Preservar os contratos dos cinco serviços; separar validação sem credenciais da publicação; garantir dono único dos recursos Kubernetes; coordenar inicialização dos bancos e secrets; validar workers OKE 1.34.2 com Oracle Linux 8.10 build1462 e shape E3 Flex; corrigir labels reservadas do kubelet e limitar as permissões do ingress; preparar teardown na ordem correta para o Load Balancer gerenciado pelo Kubernetes.</p></section>
+<section><h2>Custos e anexos</h2><p>AWS: US$ 1.077,49 por 730 horas, sem free tier.<br>OCI: US$ 675,20 por 744 horas no estimador; US$ 672,20 por 730 horas sem franquias para comparação.<br>Premissas e limitações em docs/costs/README.md; estes valores mensais não são orçamento exato de uma sessão de gravação.<br>AWS: <a href="https://calculator.aws/#/estimate?id=b49777aec14492a057f24a0d2a39f829464dbd85">https://calculator.aws/#/estimate?id=b49777aec14492a057f24a0d2a39f829464dbd85</a><br>OCI: <a href="https://www.oracle.com/cloud/costestimator.html">https://www.oracle.com/cloud/costestimator.html</a> (importar docs/costs/oci-estimate.json para restaurar a configuração).<br>Prints: docs/costs/aws-calculator.png, aws-calculator-details.png e oci-calculator.png.<br>PDFs anexos: docs/costs/aws-estimate.pdf e oci-estimate.pdf.</p></section>
+<section><h2>Validação e evidências — 14/09/2026</h2><p>Infraestrutura implantada com backend remoto. Planos finais de core e platform sem diferenças. Dois workers Ready e cinco aplicações Synced/Healthy. Smoke pelo Load Balancer aprovado: autenticação, flag, regra e avaliação true. Analytics consumiu a fila e persistiu evento no OCI NoSQL.<br>Segurança bloqueante: <a href="https://github.com/JulioDinizN/tech-challenge-fase-3/actions/runs/34798247987">https://github.com/JulioDinizN/tech-challenge-fase-3/actions/runs/34798247987</a> (Bandit B602 HIGH).<br>Correção aprovada: <a href="https://github.com/JulioDinizN/tech-challenge-fase-3/actions/runs/34798456990">https://github.com/JulioDinizN/tech-challenge-fase-3/actions/runs/34798456990</a><br>Publicação e promoção automática: <a href="https://github.com/JulioDinizN/tech-challenge-fase-3/actions/runs/34802171409">https://github.com/JulioDinizN/tech-challenge-fase-3/actions/runs/34802171409</a><br>Terraform CI final: <a href="https://github.com/JulioDinizN/tech-challenge-fase-3/actions/runs/34802800278">https://github.com/JulioDinizN/tech-challenge-fase-3/actions/runs/34802800278</a><br>Fonte f4e1d59 → imagem sha-f4e1d59faf8e → GitOps 555ac3fa236c9471e11d3fbd1abf90bd3f2fb8f6 → Argo com initiatedBy.automated=true.<br>Digest observado: sha256:9e5b35665560d3753a0ee294efc4c5fce096337fde4f05538c92848db7a21c4c.<br>A estimativa original considera workers E5; o ambiente implantado usa E3. A diferença de custo está documentada em docs/costs/README.md.<br>Pendente para submissão: gravar e publicar vídeo de até 20 minutos, inserir seu link e revisar áudio, legibilidade e identificação. Encerrar infraestrutura após conferir e salvar os clipes.</p></section>
+<section class="appendix"><h2>Arquitetura da solução</h2><figure><img src="diagrams/overall-architecture.png" alt="Arquitetura da solução"><figcaption>Visão geral da infraestrutura e do fluxo de entrega.</figcaption></figure></section>
+<section class="appendix"><h2>Arquitetura de runtime</h2><figure><img src="diagrams/runtime-architecture.png" alt="Arquitetura de runtime"><figcaption>Serviços e integrações de execução.</figcaption></figure></section>
+<section class="appendix"><h2>Estimativa AWS — resumo</h2><figure><img src="costs/aws-calculator.png" alt="Estimativa AWS — resumo"><figcaption>Captura do estimador oficial AWS. Base: 730 horas.</figcaption></figure></section>
+<section class="appendix"><h2>Estimativa AWS — detalhamento</h2><figure><img src="costs/aws-calculator-details.png" alt="Estimativa AWS — detalhamento"><figcaption>Detalhamento da estimativa AWS equivalente.</figcaption></figure></section>
+<section class="appendix"><h2>Estimativa OCI</h2><figure><img src="costs/oci-calculator.png" alt="Estimativa OCI"><figcaption>Captura do estimador oficial OCI. Base: 744 horas, com franquias. Premissas e ajuste E5/E3 documentados em costs/README.md.</figcaption></figure></section>
+<footer>ToggleMaster · Tech Challenge Fase 3 · Julio Cesar Diniz Nogueira · RM373719 · Grupo 76</footer>
+</main></body></html>

@@ -1,5 +1,5 @@
 TECH CHALLENGE — FASE 3 — TOGGLEMASTER
-Rascunho de entrega atualizado em 13/09/2026. Finalizar após demonstração.
+Relatório atualizado em 14/09/2026. Link do vídeo pendente.
 
 PARTICIPANTE
 Julio Cesar Diniz Nogueira — RM373719 — Grupo 76.
@@ -18,7 +18,7 @@ Cinco microsserviços, IaC, DevSecOps e GitOps. OCI foi aceita pela disciplina c
 Um único ambiente homolog temporário. Não há ambiente production duplicado. Terraform separa backend, core e platform em states distintos; core instancia o módulo composto oci-runtime. Platform instala Argo CD via Helm. CI testa, analisa e escaneia cada serviço em jobs separados; somente após aprovação publica imagens imutáveis e atualiza tags no GitOps. Argo realiza a entrega automática. Segredos de runtime ficam no OCI Vault, com Workload Identity e CSI; credenciais de publicação não são repassadas aos jobs de validação.
 
 DESAFIOS
-Preservar os contratos dos cinco serviços; separar validação sem credenciais da publicação; garantir dono único dos recursos Kubernetes; coordenar inicialização dos bancos e secrets; corrigir uma imagem OKE histórica rejeitada pelo plan, substituindo por imagem disponível e compatível com E5; preparar teardown na ordem correta para o Load Balancer gerenciado pelo Kubernetes.
+Preservar os contratos dos cinco serviços; separar validação sem credenciais da publicação; garantir dono único dos recursos Kubernetes; coordenar inicialização dos bancos e secrets; validar workers OKE 1.34.2 com Oracle Linux 8.10 build1462 e shape E3 Flex; corrigir labels reservadas do kubelet e limitar as permissões do ingress; preparar teardown na ordem correta para o Load Balancer gerenciado pelo Kubernetes.
 
 CUSTOS E ANEXOS
 AWS: US$ 1.077,49 por 730 horas, sem free tier.
@@ -29,7 +29,13 @@ OCI: https://www.oracle.com/cloud/costestimator.html (importar docs/costs/oci-es
 Prints: docs/costs/aws-calculator.png, aws-calculator-details.png e oci-calculator.png.
 PDFs anexos: docs/costs/aws-estimate.pdf e oci-estimate.pdf.
 
-VALIDAÇÃO ATUAL E EVIDÊNCIAS A COMPLETAR
-Planos preliminares: backend 1 criar e core 56 criar, nenhum alterar/destruir. State local isolado somente para análise, pois o bucket remoto não estava disponível; ainda gerar o plan definitivo com backend remoto. Terraform validate aprovado nos três roots; GitOps renderiza 32 recursos. Testes dos cinco serviços aprovados. Cinco imagens linux/amd64 construídas e escaneadas localmente com Trivy 0.74.0, sem vulnerabilidades CRITICAL após atualizar as bases Go/Alpine e pacotes Debian. Containers ainda não executados nesta revisão. Nenhum recurso foi criado nesta preparação.
-PENDENTE: registrar runs de segurança vermelho e verde; SHA/tag/digest e commit automático GitOps; cinco serviços saudáveis no Argo; sync automático; recursos e backend remoto efetivos. Não apresentar validações da Fase 2 como evidências da Fase 3.
-PENDENTE: conferir captura, duração, áudio, anonimização de credenciais, links, identificação e encerramento dos recursos.
+VALIDAÇÃO E EVIDÊNCIAS — 14/09/2026
+Infraestrutura implantada com backend remoto. Planos finais de core e platform sem diferenças. Dois workers Ready e cinco aplicações Synced/Healthy. Smoke pelo Load Balancer aprovado: autenticação, flag, regra e avaliação true. Analytics consumiu a fila e persistiu evento no OCI NoSQL.
+Segurança bloqueante: https://github.com/JulioDinizN/tech-challenge-fase-3/actions/runs/34798247987 (Bandit B602 HIGH).
+Correção aprovada: https://github.com/JulioDinizN/tech-challenge-fase-3/actions/runs/34798456990
+Publicação e promoção automática: https://github.com/JulioDinizN/tech-challenge-fase-3/actions/runs/34802171409
+Terraform CI final: https://github.com/JulioDinizN/tech-challenge-fase-3/actions/runs/34802800278
+Fonte f4e1d59 → imagem sha-f4e1d59faf8e → GitOps 555ac3fa236c9471e11d3fbd1abf90bd3f2fb8f6 → Argo com initiatedBy.automated=true.
+Digest observado: sha256:9e5b35665560d3753a0ee294efc4c5fce096337fde4f05538c92848db7a21c4c.
+A estimativa original considera workers E5; o ambiente implantado usa E3. A diferença de custo está documentada em docs/costs/README.md.
+Pendente para submissão: gravar e publicar vídeo de até 20 minutos, inserir seu link e revisar áudio, legibilidade e identificação. Encerrar infraestrutura após conferir e salvar os clipes.
