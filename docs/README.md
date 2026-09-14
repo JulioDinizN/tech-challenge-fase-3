@@ -18,6 +18,6 @@ As fontes `.drawio` são editáveis. `npm run diagrams:export` regenera os PNGs 
 
 ## Relatório
 
-[HTML com anexos](report.html) e [TXT](report.txt). O único campo a preencher é o link do vídeo.
+[PDF de entrega](../dist/delivery-report.pdf), [HTML com anexos](report.html) e [TXT](report.txt). O relatório inclui o link do vídeo de demonstração.
 
-`npm run report:pdf` gera `dist/delivery-report.pdf`, ignorado pelo Git. O HTML é a fonte de impressão; o PDF inclui diagramas e capturas das estimativas. Revisar o arquivo após preencher o link do vídeo.
+`npm run report:pdf` gera `dist/delivery-report.pdf`, versionado junto com o HTML e o TXT. O HTML é a fonte de impressão; o PDF inclui diagramas e capturas das estimativas. O PDF é gerado a partir da versão atual do HTML.

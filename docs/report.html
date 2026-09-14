@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ToggleMaster | Relatório de entrega — Fase 3</title>
-<style>@page{size:A4;margin:16mm 17mm}*{box-sizing:border-box}body{margin:0;background:#edf0f4;color:#243248;font:15px/1.6 Arial,sans-serif}main{max-width:960px;margin:32px auto;padding:48px 56px;background:white}header{border-top:6px solid #183d59;padding-top:20px;margin-bottom:28px}.eyebrow{font-size:12px;letter-spacing:2px;font-weight:bold;color:#4c6a80}h1{font-size:38px;color:#15364e;margin:10px 0}h2{font-size:21px;color:#183d59;border-bottom:1px solid #d7e0e7;padding-bottom:7px;margin:28px 0 12px;break-after:avoid}h3{font-size:16px;margin:18px 0 8px;break-after:avoid}p{margin:0 0 12px}a{color:#185c8d;overflow-wrap:anywhere}ul,ol{padding-left:22px;margin:8px 0 16px}li{margin:6px 0;break-inside:avoid}strong{color:#15364e}table{border-collapse:collapse;width:100%;margin:12px 0 18px;font-size:14px}th,td{text-align:left;padding:9px 11px;border-bottom:1px solid #d7e0e7;vertical-align:top}th{background:#edf3f7;color:#183d59}tr{break-inside:avoid}thead{display:table-header-group}code{font-size:.9em;overflow-wrap:anywhere}.meta,figcaption{color:#536478}.pending{padding:10px 14px;background:#f2f6f9;border-left:3px solid #4c6a80}.appendix{break-before:page}figure{margin:16px 0;break-inside:avoid}img{display:block;max-width:100%;height:auto;margin:auto}figcaption{font-size:12px;margin-top:10px}footer{border-top:1px solid #d7e0e7;margin-top:24px;padding-top:10px;font-size:12px;break-inside:avoid}@media(max-width:640px){main{margin:0;padding:24px}table{font-size:12px}th,td{padding:6px}}@media print{body{background:white;font-size:10pt;line-height:1.45}main{padding:0;margin:0;max-width:none}h1{font-size:28pt}h2{font-size:15pt;margin-top:6mm}h3{font-size:11pt}table{font-size:9pt}th,td{padding:6px 8px}p{orphans:3;widows:3}a{text-decoration:none}.appendix h2{margin-top:0}.appendix img{max-height:220mm;object-fit:contain}}</style>
+<style>@page{size:A4;margin:16mm 17mm}*{box-sizing:border-box}body{margin:0;background:#edf0f4;color:#243248;font:15px/1.6 Arial,sans-serif}main{max-width:960px;margin:32px auto;padding:48px 56px;background:white}header{border-top:6px solid #183d59;padding-top:20px;margin-bottom:28px}.eyebrow{font-size:12px;letter-spacing:2px;font-weight:bold;color:#4c6a80}h1{font-size:38px;color:#15364e;margin:10px 0}h2{font-size:21px;color:#183d59;border-bottom:1px solid #d7e0e7;padding-bottom:7px;margin:28px 0 12px;break-after:avoid}h3{font-size:16px;margin:18px 0 8px;break-after:avoid}p{margin:0 0 12px}a{color:#185c8d;overflow-wrap:anywhere}ul,ol{padding-left:22px;margin:8px 0 16px}li{margin:6px 0;break-inside:avoid}strong{color:#15364e}table{border-collapse:collapse;width:100%;margin:12px 0 18px;font-size:14px}th,td{text-align:left;padding:9px 11px;border-bottom:1px solid #d7e0e7;vertical-align:top}th{background:#edf3f7;color:#183d59}tr{break-inside:avoid}thead{display:table-header-group}code{font-size:.9em;overflow-wrap:anywhere}.meta,figcaption{color:#536478}.pending{padding:10px 14px;background:#f2f6f9;border-left:3px solid #4c6a80}.appendix{break-before:page}.chapter{break-before:page}figure{margin:16px 0;break-inside:avoid}img{display:block;max-width:100%;height:auto;margin:auto}figcaption{font-size:12px;margin-top:10px}footer{border-top:1px solid #d7e0e7;margin-top:24px;padding-top:10px;font-size:12px;break-inside:avoid}@media(max-width:640px){main{margin:0;padding:24px}table{font-size:12px}th,td{padding:6px}}@media print{body{background:white;font-size:10pt;line-height:1.45}main{padding:0;margin:0;max-width:none}h1{font-size:28pt}h2{font-size:15pt;margin-top:6mm}h3{font-size:11pt}table{font-size:9pt}th,td{padding:6px 8px}p{orphans:3;widows:3}a{text-decoration:none}.appendix h2{margin-top:0}.appendix img{max-height:220mm;object-fit:contain}}</style>
 </head>
 <body><main>
 <header>
@@ -26,7 +26,7 @@
 <li><a href="https://github.com/JulioDinizN/tech-challenge-fase-3-gitops">Repositório GitOps — estado desejado do Kubernetes</a></li>
 <li><a href="https://github.com/JulioDinizN/tech-challenge-fase-3/tree/main/docs">Documentação técnica</a></li>
 </ul>
-<p class="pending"><strong>Vídeo da Fase 3:</strong> [INSERIR LINK DO VÍDEO]</p>
+<p class="pending"><strong>Vídeo da Fase 3:</strong> <a href="https://drive.google.com/file/d/1-sSwyvCVKVUdlNq462ezvanIvjVPrwN9/view?usp=drive_link">Assistir à demonstração — ToggleMaster Fase 3</a></p>
 </section>
 <section>
 <h2>2. Solução e decisões de arquitetura</h2>
@@ -52,7 +52,9 @@
 <tr><td>Armazenamento de objetos</td><td>S3</td><td>Object Storage</td></tr>
 </tbody></table>
 </section>
-<section>
+<section class="appendix"><h2>Arquitetura da solução</h2><figure><img src="diagrams/overall-architecture.png" alt="Arquitetura da solução"><figcaption>Visão geral da infraestrutura e do fluxo de entrega.</figcaption></figure></section>
+<section class="appendix"><h2>Arquitetura de runtime</h2><figure><img src="diagrams/runtime-architecture.png" alt="Arquitetura de runtime"><figcaption>Serviços e integrações de execução.</figcaption></figure></section>
+<section class="chapter">
 <h2>3. Desafios de implementação</h2>
 <ul>
 <li>Preservar os contratos dos cinco microsserviços durante a evolução da infraestrutura e da entrega.</li>
@@ -77,11 +79,9 @@
 <li><a href="https://calculator.aws/#/estimate?id=b49777aec14492a057f24a0d2a39f829464dbd85">Estimativa salva no AWS Pricing Calculator</a>.</li>
 <li><a href="https://www.oracle.com/cloud/costestimator.html">Oracle Cloud Cost Estimator</a>: importar <a href="https://github.com/JulioDinizN/tech-challenge-fase-3/blob/main/docs/costs/oci-estimate.json">oci-estimate.json</a> para restaurar a configuração.</li>
 <li>Estimativas em PDF: <a href="https://github.com/JulioDinizN/tech-challenge-fase-3/blob/main/docs/costs/aws-estimate.pdf">AWS</a> e <a href="https://github.com/JulioDinizN/tech-challenge-fase-3/blob/main/docs/costs/oci-estimate.pdf">OCI</a>.</li>
-<li>As capturas dos estimadores e os diagramas estão incluídos nos anexos a seguir.</li>
+<li>As capturas dos estimadores estão apresentadas a seguir.</li>
 </ul>
 </section>
-<section class="appendix"><h2>Arquitetura da solução</h2><figure><img src="diagrams/overall-architecture.png" alt="Arquitetura da solução"><figcaption>Visão geral da infraestrutura e do fluxo de entrega.</figcaption></figure></section>
-<section class="appendix"><h2>Arquitetura de runtime</h2><figure><img src="diagrams/runtime-architecture.png" alt="Arquitetura de runtime"><figcaption>Serviços e integrações de execução.</figcaption></figure></section>
 <section class="appendix"><h2>Estimativa AWS — resumo</h2><figure><img src="costs/aws-calculator.png" alt="Estimativa AWS — resumo"><figcaption>Captura do estimador oficial AWS. Base: 730 horas.</figcaption></figure></section>
 <section class="appendix"><h2>Estimativa AWS — detalhamento</h2><figure><img src="costs/aws-calculator-details.png" alt="Estimativa AWS — detalhamento"><figcaption>Detalhamento da estimativa AWS equivalente.</figcaption></figure></section>
 <section class="appendix"><h2>Estimativa OCI</h2><figure><img src="costs/oci-calculator.png" alt="Estimativa OCI"><figcaption>Captura do estimador oficial OCI. Base: 744 horas, com franquias. Premissas e ajuste E5/E3 documentados em costs/README.md.</figcaption></figure></section>

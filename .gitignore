@@ -19,7 +19,8 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 bin/
-dist/
+dist/*
+!dist/delivery-report.pdf
 build/
 coverage/
 

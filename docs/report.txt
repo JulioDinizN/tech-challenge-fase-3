@@ -9,7 +9,7 @@ LINKS
 Código, CI e infraestrutura: https://github.com/JulioDinizN/tech-challenge-fase-3
 GitOps: https://github.com/JulioDinizN/tech-challenge-fase-3-gitops
 Documentação: https://github.com/JulioDinizN/tech-challenge-fase-3/tree/main/docs
-Vídeo da Fase 3: [INSERIR LINK DO VÍDEO]
+Vídeo da Fase 3: https://drive.google.com/file/d/1-sSwyvCVKVUdlNq462ezvanIvjVPrwN9/view?usp=drive_link
 
 
 SOLUÇÃO E DECISÕES
