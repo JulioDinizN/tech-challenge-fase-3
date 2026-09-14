@@ -68,7 +68,7 @@ Enquanto essas variáveis estiverem ausentes ou diferentes de true, os workflows
 
 OCI Vault continua como fonte dos segredos de runtime, consumidos no OKE por Workload Identity e Secrets Store CSI. O CI não lê senhas de banco, MASTER_KEY ou chaves internas.
 
-A publicação futura utilizará OCIR_USERNAME e OCIR_AUTH_TOKEN limitados ao OCIR, além de GITOPS_TOKEN limitado ao repositório GitOps. OCIR_REGISTRY, OCIR_NAMESPACE e OCIR_REPOSITORY_PREFIX serão GitHub Variables não secretas.
+A publicação utiliza os Secrets OCIR_USERNAME e OCIR_AUTH_TOKEN para autenticação no OCIR, além de GITOPS_SSH_KEY, uma chave de deploy com escrita restrita ao repositório GitOps. OCIR_REGISTRY, OCIR_NAMESPACE e OCIR_REPOSITORY_PREFIX são GitHub Variables não secretas.
 
 ## Validação local
 

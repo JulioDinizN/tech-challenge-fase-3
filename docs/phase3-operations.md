@@ -19,7 +19,15 @@ O script não faz plan, apply, deploy, push ou consultas ao cluster. Scans/teste
 - `platform`: Helm gerencia CSI, provider OCI, Metrics Server, NGINX Ingress e Argo. API Argo permanece ClusterIP, acessada por port-forward.
 - `infra/oci`: legado da Fase 2. Não aplicar legado e core sobre os mesmos recursos. Nenhum state foi migrado nesta preparação. Antes de usar um compartimento que já tenha recursos, inventariar os states e planejar import/migração; não aplicar core cegamente.
 
-Core exige região, OCIDs, IP permitido, versão Kubernetes e imagem OKE compatível. O exemplo usa Ashburn, workers E5 e PostgreSQL E5/Standard3. A imagem foi validada no preflight; reconfirmar disponibilidade e quotas antes do apply. O ambiente usa PostgreSQL E5 para auth, E6 para flag e Standard3 para targeting, conforme cotas por shape. Core e platform usam chaves distintas do backend. Não versionar `.tfvars`, `backend.hcl`, kubeconfig, state ou planos salvos.
+Core exige região, OCIDs, IP permitido, versão Kubernetes e imagem OKE compatível. O exemplo usa Ashburn, workers E5 e PostgreSQL E5/E6/Standard3. A imagem foi validada no preflight; reconfirmar disponibilidade e quotas antes do apply. O ambiente usa PostgreSQL E5 para auth, E6 para flag e Standard3 para targeting, conforme cotas por shape. Core e platform usam chaves distintas do backend. Não versionar `.tfvars`, `backend.hcl`, kubeconfig, state ou planos salvos.
+
+## Validação dos workers antes do deploy
+
+Na Fase 2, a imagem OKE build `1505` falhou no initramfs com erro de resolução iSCSI, antes de cloud-init e kubelet. O `RegisterTimeOut` foi consequência; rede e criptografia PV em trânsito não eram a causa. A build `1462` funcionou em E3/AD-3, mas não consta no catálogo atual filtrado para OKE 1.34.2/OL8/x86.
+
+Para esta implantação, a build `1578` foi confirmada como `AVAILABLE`, listada para Kubernetes `v1.34.2` e compatível com `VM.Standard.E5.Flex`; seu disco mínimo cabe no boot volume de 50 GiB. Iniciar com um worker em AD-3, aguardar `Ready`, conferir `status.nodeInfo.kubeletVersion` e testar agendamento antes de ampliar para dois. Se o registro falhar, investigar Work Request e console serial antes de mudar rede ou repetir a criação. Compatibilidade declarada no catálogo não substitui essa verificação real de boot.
+
+O primeiro boot da build `1578` completou initramfs/cloud-init, mas revelou um segundo problema: o kubelet rejeita `app.kubernetes.io/part-of` em `--node-labels`. O módulo usa agora o label inicial `project=togglemaster`, fora dos domínios reservados. Labels `app.kubernetes.io/*` dos manifests dos aplicativos não são afetados.
 
 ## Sequência futura de ativação — somente com autorização
 

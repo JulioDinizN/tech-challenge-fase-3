@@ -48,7 +48,7 @@ resource "oci_containerengine_node_pool" "main" {
   freeform_tags      = local.common_tags
 
   initial_node_labels {
-    key   = "app.kubernetes.io/part-of"
+    key   = "project"
     value = var.project_name
   }
 
