@@ -72,3 +72,5 @@ Além das quotas, conferir a identidade que executará Terraform: permissões de
 O prazo de 20 minutos é para o vídeo editado, não para provisionamento/validação/teardown. A reconciliação do Argo configurada em 60s também não garante rollout saudável em 60s; salvar a sequência real de commits e operações.
 
 A OCI Cache adiciona automaticamente a `redis-security-list` à subnet de dados. O Terraform preserva essa associação gerenciada pelo serviço com `ignore_changes` somente em `security_list_ids` dessa subnet; os NSGs do projeto continuam versionados.
+
+O chart NGINX2.6.1 é versionado em `platform/charts` com as referências de schema incorporadas localmente. Templates e valores upstream são preservados; a validação permanece ativa. O script `scripts/vendor-nginx-chart.py` verifica os hashes das fontes e reproduz o arquivo.

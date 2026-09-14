@@ -36,11 +36,11 @@ resource "helm_release" "ingress" {
   name             = "nginx-ingress"
   namespace        = "nginx-ingress"
   create_namespace = true
-  repository       = "oci://ghcr.io/nginx/charts"
-  chart            = "nginx-ingress"
-  version          = "2.6.1"
-  atomic           = true
-  timeout          = 600
+  # Upstream chart with its external schema references bundled locally.
+  chart   = "${path.module}/charts/nginx-ingress-2.6.1.tgz"
+  version = "2.6.1"
+  atomic  = true
+  timeout = 600
   values = [yamlencode({ controller = {
     nginxplus             = false
     image                 = { repository = "docker.io/nginx/nginx-ingress" }
